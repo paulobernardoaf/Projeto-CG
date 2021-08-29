@@ -143,18 +143,18 @@ void buildBackWall(Object wall, Vec3 origin, Color color) {
 }
 
 void buildLeftWall(Object wall, Vec3 origin, Color color) {
-  
+
   Vec3 position;
 
   // top
   color = (Color){ 110.0f, 0.0f, 149.0f };
-  Object top = (Object){ wall.width, wall.height / 4, wall.depth / 5 };
-  position = (Vec3){ origin.x, origin.y + 3 * wall.height / 4, origin.z + 4 * wall.depth / 5};
+  Object top = (Object){ wall.width, wall.height / 4, wall.depth / 6 };
+  position = (Vec3){ origin.x, origin.y + 3 * wall.height / 4, origin.z + 5 * wall.depth / 6 };
   buildBlock(top, position, color);
 
   // left
   color = (Color){ 113.0f, 111.0f, 129.0f };
-  Object left = (Object){ wall.width, wall.height, 4 * wall.depth / 5 };
+  Object left = (Object){ wall.width, wall.height, 5 * wall.depth / 6 };
   position = (Vec3){ origin.x, origin.y, origin.z };
   buildBlock(left, position, color);
 }
@@ -202,10 +202,23 @@ void buildKitchen(Object kitchen) {
   wall = (Object){ wallDepth, kitchen.height, kitchen.depth };
   origin = (Vec3){ kitchen.width, 0.0f, 0.0f };
   buildLeftWall(wall, origin, color);
+}
 
-  // door
+void buildDoor(Object kitchen, float doorAngle) {
+  
+  Color color;
+  Object wall;
+  Vec3 origin;
+
+  float doorDepth = 0.125f;
+
+  glPushMatrix();
   color = (Color){ 240.0f, 240.0f, 240.0f };
-  wall = (Object){ wallDepth, kitchen.height, kitchen.depth };
-  origin = (Vec3){ kitchen.width, 0.0f, 0.0f };
+  wall = (Object){ doorDepth, 3 * kitchen.height / 4, kitchen.depth / 6 - doorDepth};
+  origin = (Vec3){ 0.0f, 0.0f, 0.0f };
+  glTranslatef(kitchen.width + doorDepth, 0.0f, kitchen.depth - doorDepth);
+  glRotatef(180.0f + doorAngle, 0.0f, 1.0f, 0.0f);
   buildBlock(wall, origin, color);
+
+  glPopMatrix();
 }

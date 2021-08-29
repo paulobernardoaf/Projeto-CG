@@ -25,4 +25,6 @@ extern void buildBlock(Object block, Vec3 origin, Color color);
 
 extern void buildFace(Vec3 vertices[], Vec3 origin, Color color);
 
+extern void buildDoor(Object kitchen, float doorAngle);
+
 #endif

@@ -1,5 +1,6 @@
 #include <math.h>
 #include <ctype.h>
+#include <stdio.h>
 
 #include <GL/gl.h>
 #include <GL/freeglut.h>
@@ -14,19 +15,21 @@
 // Global variables
 
 Vec2 WINDOW_SIZE = { WINDOW_WIDTH, WINDOW_HEIGHT };
-Vec2 WINDOW_CENTER = { WINDOW_WIDTH/2, WINDOW_HEIGHT / 2 };
+Vec2 WINDOW_CENTER = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 };
 float FOVY = 60.0f;
 float ZNEAR = 10e-3;
 Camera CAM;
 int KEYBOARD[128] = { 0 };
+
+// OPEN = 1; OPENING = 2; CLOSED = 3; CLOSING = 4
+int DOOR_STEP = 3;
+float DOOR_ANGLE = 0.0f;
 
 void init_gl();
 
 // Callbacks
 
 void display();
-
-void idle();
 
 void motion(int x, int y);
 
@@ -43,56 +46,8 @@ void draw_axis(int x, int y, int z);
 
 void draw_grid(int n);
 
+void update(int value) {
 
-int main(int argc, char** argv) {
-  glutInit(&argc, argv);
-
-  glutInitWindowSize(WINDOW_SIZE.x, WINDOW_SIZE.y);
-  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
-  glutCreateWindow("Projeto CG");
-  glutWarpPointer(WINDOW_CENTER.x, WINDOW_CENTER.y);
-
-  glutDisplayFunc(display);
-  glutIdleFunc(idle);
-  glutPassiveMotionFunc(motion);
-  glutKeyboardFunc(keyboard);
-  glutKeyboardUpFunc(keyboard_up);
-  glutReshapeFunc(reshape);
-
-  init_gl();
-
-  initializeCamera(&CAM);
-
-  glutMainLoop();
-
-  return 0;
-}
-
-
-void init_gl() {
-  glEnable(GL_DEPTH_TEST);
-  glEnable(GL_CULL_FACE);
-  glCullFace(GL_BACK);
-}
-
-
-// Callbacks
-
-void display() {
-  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-  glClearColor(0.31, 0.61, 0.85, 1.0);
-
-  setupCamera(&CAM);
-  
-  draw_grid(20);
-  draw_axis(1, 1, 1);
-  Object kitchen = (Object){ 9.0f, 5.0f, 15.0f };
-  buildKitchen(kitchen);
-
-  glutSwapBuffers();
-}
-
-void idle() {
   // Forward movement
   int move_forward = KEYBOARD['w'] - KEYBOARD['s'];
   Vec3 fwd = forward(&CAM);
@@ -112,6 +67,73 @@ void idle() {
   CAM.position.z += 0.1f * (fwd.z + rgt.z);
 
   glutPostRedisplay();
+  glutTimerFunc(30, update, 0);
+}
+
+int main(int argc, char** argv) {
+  glutInit(&argc, argv);
+
+  glutInitWindowSize(WINDOW_SIZE.x, WINDOW_SIZE.y);
+  glutInitDisplayMode(GLUT_RGB | GLUT_DOUBLE | GLUT_DEPTH);
+  glutCreateWindow("Projeto CG");
+  glutWarpPointer(WINDOW_CENTER.x, WINDOW_CENTER.y);
+
+  glutDisplayFunc(display);
+  glutPassiveMotionFunc(motion);
+  glutKeyboardFunc(keyboard);
+  glutKeyboardUpFunc(keyboard_up);
+  glutReshapeFunc(reshape);
+  glutTimerFunc(30, update, 0);
+
+  init_gl();
+
+  initializeCamera(&CAM);
+
+  glutMainLoop();
+
+  return 0;
+}
+
+
+void init_gl() {
+  glEnable(GL_DEPTH_TEST);
+  glEnable(GL_CULL_FACE);
+  glCullFace(GL_BACK);
+}
+
+void handleDoorAnimation() {
+  if (DOOR_STEP == 2) { // opening
+    DOOR_ANGLE += 1.0f;
+  }
+  else if (DOOR_STEP == 4) { // closing
+    DOOR_ANGLE -= 1.0f;
+  }
+
+  if (DOOR_ANGLE >= 90.0f) {
+    DOOR_STEP = 1; // open
+  }
+  else if (DOOR_ANGLE <= 0.0f) {
+    DOOR_STEP = 3; // closed
+  }
+}
+
+// Callbacks
+
+void display() {
+  glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+  glClearColor(0.31, 0.61, 0.85, 1.0);
+
+  setupCamera(&CAM);
+
+  draw_grid(20);
+  draw_axis(1, 1, 1);
+  Object kitchen = (Object){ 9.0f, 5.0f, 15.0f };
+  buildKitchen(kitchen);
+
+  handleDoorAnimation();
+  buildDoor(kitchen, DOOR_ANGLE);
+
+  glutSwapBuffers();
 }
 
 void motion(int x, int y) {
@@ -134,7 +156,15 @@ void motion(int x, int y) {
 }
 
 void keyboard(unsigned char key, int x, int y) {
-  if (key == 27)
+  if (key == '1') {
+    if (DOOR_STEP == 1) { // open
+      DOOR_STEP = 4; // closing
+    }
+    else if (DOOR_STEP == 3) { // closed 
+      DOOR_STEP = 2; // opening
+    }
+  }
+  else if (key == 27)
     glutLeaveMainLoop();
 
   KEYBOARD[tolower(key)] = 1;
