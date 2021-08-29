@@ -86,8 +86,8 @@ void display() {
   
   draw_grid(20);
   draw_axis(1, 1, 1);
-  Object room = (Object){ 9.0f, 5.0f, 15.0f };
-  drawRoom(room);
+  Object kitchen = (Object){ 9.0f, 5.0f, 15.0f };
+  buildKitchen(kitchen);
 
   glutSwapBuffers();
 }

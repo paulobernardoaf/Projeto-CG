@@ -159,7 +159,7 @@ void buildLeftWall(Object wall, Vec3 origin, Color color) {
   buildBlock(left, position, color);
 }
 
-void drawRoom(Object room) {
+void buildKitchen(Object kitchen) {
 
   Color color;
   Object wall;
@@ -169,37 +169,43 @@ void drawRoom(Object room) {
 
   // floor
   color = (Color){ 113.0f, 111.0f, 129.0f };
-  wall = (Object){ room.width, 0.0f, room.depth };
+  wall = (Object){ kitchen.width, 0.0f, kitchen.depth };
   origin = (Vec3){ 0.0f, 0.0f, 0.0f };
   buildBlock(wall, origin, color);
 
   // ceil
   color = (Color){ 255.0f, 0.0f, 149.0f };
-  wall = (Object){ room.width, 0.0f, room.depth };
-  origin = (Vec3){ 0.0f, room.height, 0.0f };
+  wall = (Object){ kitchen.width, 0.0f, kitchen.depth };
+  origin = (Vec3){ 0.0f, kitchen.height, 0.0f };
   buildBlock(wall, origin, color);
 
   // front wall
   color = (Color){ 243.0f, 139.0f, 160.0f };
-  wall = (Object){ room.width, room.height, 0.0f };
+  wall = (Object){ kitchen.width, kitchen.height, 0.0f };
   origin = (Vec3){ 0.0f, 0.0f, 0.0f };
   buildBlock(wall, origin, color);
 
   // back wall
   color = (Color){ 246.0f, 174.0f, 153.0f };
-  wall = (Object){ room.width, room.height, wallDepth };
-  origin = (Vec3){ 0.0f, 0.0f, room.depth };
+  wall = (Object){ kitchen.width, kitchen.height, wallDepth };
+  origin = (Vec3){ 0.0f, 0.0f, kitchen.depth };
   buildBackWall(wall, origin, color);
 
   // right wall
   color = (Color){ 242.0f, 225.0f, 193.0f };
-  wall = (Object){ 0.0f, room.height, room.depth };
+  wall = (Object){ 0.0f, kitchen.height, kitchen.depth };
   origin = (Vec3){ 0.0f, 0.0f, 0.0f };
   buildBlock(wall, origin, color);
 
   // left wall
   color = (Color){ 255.0f, 0.0f, 0.0f };
-  wall = (Object){ wallDepth, room.height, room.depth };
-  origin = (Vec3){ room.width, 0.0f, 0.0f };
+  wall = (Object){ wallDepth, kitchen.height, kitchen.depth };
+  origin = (Vec3){ kitchen.width, 0.0f, 0.0f };
   buildLeftWall(wall, origin, color);
+
+  // door
+  color = (Color){ 240.0f, 240.0f, 240.0f };
+  wall = (Object){ wallDepth, kitchen.height, kitchen.depth };
+  origin = (Vec3){ kitchen.width, 0.0f, 0.0f };
+  buildBlock(wall, origin, color);
 }

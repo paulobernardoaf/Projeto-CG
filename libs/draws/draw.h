@@ -19,7 +19,7 @@ extern void draw_axis(int x, int y, int z);
 
 extern void draw_grid(int n);
 
-extern void drawRoom(Object room);
+extern void buildKitchen(Object kitchen);
 
 extern void buildBlock(Object block, Vec3 origin, Color color);
 
