@@ -19,8 +19,10 @@ extern void draw_axis(int x, int y, int z);
 
 extern void draw_grid(int n);
 
-extern void drawRoom();
+extern void drawRoom(Object room);
 
-extern void buildWall(Vec3 position, Object scale, Rotation rotation, Color color);
+extern void buildBlock(Object block, Vec3 origin, Color color);
+
+extern void buildFace(Vec3 vertices[], Vec3 origin, Color color);
 
 #endif

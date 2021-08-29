@@ -86,7 +86,8 @@ void display() {
   
   draw_grid(20);
   draw_axis(1, 1, 1);
-  drawRoom();
+  Object room = (Object){ 9.0f, 5.0f, 15.0f };
+  drawRoom(room);
 
   glutSwapBuffers();
 }
@@ -155,7 +156,3 @@ void reshape(int width, int height) {
   glLoadIdentity();
   gluPerspective(FOVY, aspect, ZNEAR, ZFAR);
 }
-
-
-
-
