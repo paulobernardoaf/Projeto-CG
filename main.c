@@ -9,6 +9,7 @@
 #include "libs/colors.h"
 #include "libs/camera/camera.h"
 #include "libs/draws/draw.h"
+#include "libs/animations/animation.h"
 
 #define WINDOW_WIDTH 16*75
 #define WINDOW_HEIGHT 9*75
@@ -21,9 +22,11 @@ float ZNEAR = 10e-3;
 Camera CAM;
 int KEYBOARD[128] = { 0 };
 
-// OPEN = 1; OPENING = 2; CLOSED = 3; CLOSING = 4
 int DOOR_STEP = 3;
 float DOOR_ANGLE = 0.0f;
+
+int WINDOW_STEP = 1;
+float WINDOW_ANGLE = 0.0f;
 
 void init_gl();
 
@@ -39,14 +42,9 @@ void keyboard_up(unsigned char key, int x, int y);
 
 void reshape(int width, int height);
 
-
-// Drawing utils
-
-void draw_axis(int x, int y, int z);
-
-void draw_grid(int n);
-
 void update(int value) {
+
+  float MOVEMENT_SPEED = 2.0f;
 
   // Forward movement
   int move_forward = KEYBOARD['w'] - KEYBOARD['s'];
@@ -63,8 +61,8 @@ void update(int value) {
   rgt.x *= move_right;
   rgt.z *= move_right;
 
-  CAM.position.x += 0.1f * (fwd.x + rgt.x);
-  CAM.position.z += 0.1f * (fwd.z + rgt.z);
+  CAM.position.x += 0.1f * (fwd.x + rgt.x) * MOVEMENT_SPEED;
+  CAM.position.z += 0.1f * (fwd.z + rgt.z) * MOVEMENT_SPEED;
 
   glutPostRedisplay();
   glutTimerFunc(30, update, 0);
@@ -101,37 +99,23 @@ void init_gl() {
   glCullFace(GL_BACK);
 }
 
-void handleDoorAnimation() {
-  if (DOOR_STEP == 2) { // opening
-    DOOR_ANGLE += 1.0f;
-  }
-  else if (DOOR_STEP == 4) { // closing
-    DOOR_ANGLE -= 1.0f;
-  }
-
-  if (DOOR_ANGLE >= 90.0f) {
-    DOOR_STEP = 1; // open
-  }
-  else if (DOOR_ANGLE <= 0.0f) {
-    DOOR_STEP = 3; // closed
-  }
-}
-
 // Callbacks
-
 void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glClearColor(0.31, 0.61, 0.85, 1.0);
 
   setupCamera(&CAM);
 
-  draw_grid(20);
+  draw_grid(15, 9);
   draw_axis(1, 1, 1);
   Object kitchen = (Object){ 9.0f, 5.0f, 15.0f };
   buildKitchen(kitchen);
 
   handleDoorAnimation();
   buildDoor(kitchen, DOOR_ANGLE);
+
+  handleWindowAnimation();
+  buildWindow(kitchen, WINDOW_ANGLE);
 
   glutSwapBuffers();
 }
@@ -157,12 +141,10 @@ void motion(int x, int y) {
 
 void keyboard(unsigned char key, int x, int y) {
   if (key == '1') {
-    if (DOOR_STEP == 1) { // open
-      DOOR_STEP = 4; // closing
-    }
-    else if (DOOR_STEP == 3) { // closed 
-      DOOR_STEP = 2; // opening
-    }
+    handleDoor();
+  }
+  else if (key == '2') {
+    handleWindow();
   }
   else if (key == 27)
     glutLeaveMainLoop();

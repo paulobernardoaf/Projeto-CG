@@ -32,20 +32,23 @@ void draw_axis(int x, int y, int z) {
 
 }
 
-void draw_grid(int n) {
+void draw_grid(int n, int m) {
 
   int i;
 
   glBegin(GL_LINES);
   glColor3f(WHITE);
-  for (i = -n;i < n;i++) {
+  for (i = 0;i <= n;i++) {
     float d = (float)i;
     // Parallel to x-axis 
-    glVertex3f(-n, 0.0f, d);
-    glVertex3f(n, 0.0f, d);
+    glVertex3f(0, 0.01f, d);
+    glVertex3f(m, 0.01f, d);
+  }
+  for (i = 0;i <= m;i++) {
+    float d = (float)i;
     // Parallel to z-axis
-    glVertex3f(d, 0.0f, -n);
-    glVertex3f(d, 0.0f, n);
+    glVertex3f(d, 0.01f, 0);
+    glVertex3f(d, 0.01f, n);
   }
   glEnd();
 
@@ -205,7 +208,7 @@ void buildKitchen(Object kitchen) {
 }
 
 void buildDoor(Object kitchen, float doorAngle) {
-  
+
   Color color;
   Object wall;
   Vec3 origin;
@@ -214,11 +217,55 @@ void buildDoor(Object kitchen, float doorAngle) {
 
   glPushMatrix();
   color = (Color){ 240.0f, 240.0f, 240.0f };
-  wall = (Object){ doorDepth, 3 * kitchen.height / 4, kitchen.depth / 6 - doorDepth};
+  wall = (Object){ doorDepth, 3 * kitchen.height / 4, kitchen.depth / 6 - doorDepth };
   origin = (Vec3){ 0.0f, 0.0f, 0.0f };
   glTranslatef(kitchen.width + doorDepth, 0.0f, kitchen.depth - doorDepth);
   glRotatef(180.0f + doorAngle, 0.0f, 1.0f, 0.0f);
   buildBlock(wall, origin, color);
 
   glPopMatrix();
+}
+
+void buildWindow(Object kitchen, float windowAngle) {
+
+  float glassDepth = 0.05f;
+  float rotationOffset = 0.25f;
+
+  Color color = (Color){ 148.0f, 201.0f, 228.0f };
+  Object window = (Object){ kitchen.width / 3, (kitchen.height / 3) / 4, glassDepth };
+  Vec3 origin = (Vec3){ 0.0f, 0.0f, 0.0f };
+
+  glPushMatrix(); {
+    glPushMatrix(); {
+      glTranslatef(window.width, (kitchen.height / 3), kitchen.depth + 0.25f / 2 - glassDepth / 2);
+      buildBlock(window, origin, color);
+    } glPopMatrix();
+
+    glPushMatrix(); {
+      glTranslatef(window.width, (kitchen.height / 3) + window.height + rotationOffset, kitchen.depth + 0.25f / 2 - glassDepth / 2);
+      glPushMatrix(); {
+        glRotatef(windowAngle, 1.0f, 0.0f, 0.0f);
+        glTranslatef(0.0f, -rotationOffset, 0.0f);
+        buildBlock(window, origin, color);
+      } glPopMatrix();
+    } glPopMatrix();
+
+    glPushMatrix(); {
+      glTranslatef(window.width, (kitchen.height / 3) + (window.height * 2) + rotationOffset, kitchen.depth + 0.25f / 2 - glassDepth / 2);
+      glPushMatrix(); {
+        glRotatef(windowAngle, 1.0f, 0.0f, 0.0f);
+        glTranslatef(0.0f, -rotationOffset, 0.0f);
+        buildBlock(window, origin, color);
+      } glPopMatrix();
+    } glPopMatrix();
+
+    glPushMatrix(); {
+      glTranslatef(window.width, (kitchen.height / 3) + (window.height * 3) + rotationOffset, kitchen.depth + 0.25f / 2 - glassDepth / 2);
+      glPushMatrix(); {
+        glRotatef(windowAngle, 1.0f, 0.0f, 0.0f);
+        glTranslatef(0.0f, -rotationOffset, 0.0f);
+        buildBlock(window, origin, color);
+      } glPopMatrix();
+    } glPopMatrix();
+  } glPopMatrix();
 }

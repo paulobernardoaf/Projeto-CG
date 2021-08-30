@@ -17,7 +17,7 @@ typedef struct Rotation {
 
 extern void draw_axis(int x, int y, int z);
 
-extern void draw_grid(int n);
+extern void draw_grid(int n, int m);
 
 extern void buildKitchen(Object kitchen);
 
@@ -26,5 +26,7 @@ extern void buildBlock(Object block, Vec3 origin, Color color);
 extern void buildFace(Vec3 vertices[], Vec3 origin, Color color);
 
 extern void buildDoor(Object kitchen, float doorAngle);
+
+extern void buildWindow(Object kitchen, float windowAngle);
 
 #endif
