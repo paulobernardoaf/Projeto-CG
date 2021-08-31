@@ -1,6 +1,7 @@
 {
   "files.associations": {
     "vector.h": "c",
-    "colors.h": "c"
+    "colors.h": "c",
+    "loader.h": "c"
   }
 }

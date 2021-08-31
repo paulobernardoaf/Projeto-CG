@@ -3,6 +3,7 @@
 
 #include "../vector.h"
 #include "../colors.h"
+#include "../loader/loader.h"
 
 #define ZFAR (float)10e3
 
@@ -28,5 +29,11 @@ extern void buildFace(Vec3 vertices[], Vec3 origin, Color color);
 extern void buildDoor(Object kitchen, float doorAngle);
 
 extern void buildWindow(Object kitchen, float windowAngle);
+
+extern void buildObject(Object3d object, int faces);
+
+extern void buildFridge(Object3d fridge, int faces);
+
+extern void buildMicrowave(Object3d microwave, int faces);
 
 #endif

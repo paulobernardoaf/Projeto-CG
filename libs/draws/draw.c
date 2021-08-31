@@ -1,6 +1,7 @@
 #include "draw.h"
 #include "../colors.h"
 #include "../vector.h"
+#include "../loader/loader.h"
 
 #include <math.h>
 #include <ctype.h>
@@ -267,5 +268,35 @@ void buildWindow(Object kitchen, float windowAngle) {
         buildBlock(window, origin, color);
       } glPopMatrix();
     } glPopMatrix();
+  } glPopMatrix();
+}
+
+void buildObject(Object3d object, int faces) {
+  faces == 3 ? glBegin(GL_TRIANGLES) : glBegin(GL_QUADS);
+  for (int i = 0;i < object.VERTEX_COUNT;i++) {
+    glNormal3f(object.NORMALS[i].x, object.NORMALS[i].y, object.NORMALS[i].z);
+    glTexCoord2f(object.TEX_COORDS[i].x, object.TEX_COORDS[i].y);
+    glVertex3f(object.VERTICES[i].x, object.VERTICES[i].y, object.VERTICES[i].z);
+  }
+  glEnd();
+}
+
+void buildFridge(Object3d fridge, int faces) {
+  glPushMatrix(); {
+    glTranslatef(1.0f, 0.0f, 1.0f);
+    glScalef(0.02f, 0.015f, 0.015f);
+    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);
+    buildObject(fridge, faces);
+  } glPopMatrix();
+}
+
+void buildMicrowave(Object3d microwave, int faces) {
+  glPushMatrix(); {
+    // glTranslatef(1.0f, 0.0f, 1.0f);
+    // glScalef(0.015f, 0.015f, 0.15f);
+    // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    // glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);
+    // buildObject(microwave, faces);
   } glPopMatrix();
 }

@@ -10,6 +10,7 @@
 #include "libs/camera/camera.h"
 #include "libs/draws/draw.h"
 #include "libs/animations/animation.h"
+#include "libs/loader/loader.h"
 
 #define WINDOW_WIDTH 16*75
 #define WINDOW_HEIGHT 9*75
@@ -27,6 +28,10 @@ float DOOR_ANGLE = 0.0f;
 
 int WINDOW_STEP = 1;
 float WINDOW_ANGLE = 0.0f;
+
+// Objects
+Object3d fridge;
+Object3d microwave;
 
 void init_gl();
 
@@ -65,7 +70,24 @@ void update(int value) {
   CAM.position.z += 0.1f * (fwd.z + rgt.z) * MOVEMENT_SPEED;
 
   glutPostRedisplay();
-  glutTimerFunc(30, update, 0);
+  glutTimerFunc(5, update, 0);
+}
+
+int initializeObjects() {
+  fridge = load_obj("./objs/fridge/Fridge.obj", 4);
+
+  if (!fridge.VERTEX_COUNT) {
+    perror("Erro opening fridge .obj file!");
+    return 0;
+  }
+
+  // microwave = load_obj("./objs/microwave/Microwave.obj", 4);
+  // if (!microwave.VERTEX_COUNT) {
+  //   perror("Erro opening microwave .obj file!");
+  //   return 0;
+  // }
+  
+  return 1;
 }
 
 int main(int argc, char** argv) {
@@ -81,9 +103,13 @@ int main(int argc, char** argv) {
   glutKeyboardFunc(keyboard);
   glutKeyboardUpFunc(keyboard_up);
   glutReshapeFunc(reshape);
-  glutTimerFunc(30, update, 0);
+  glutTimerFunc(5, update, 0);
 
   init_gl();
+
+  if (!initializeObjects()) {
+    return -1;
+  };
 
   initializeCamera(&CAM);
 
@@ -111,6 +137,9 @@ void display() {
   Object kitchen = (Object){ 9.0f, 5.0f, 15.0f };
   buildKitchen(kitchen);
 
+  buildFridge(fridge, 4);
+  // buildMicrowave(microwave, 4);
+  
   handleDoorAnimation();
   buildDoor(kitchen, DOOR_ANGLE);
 
