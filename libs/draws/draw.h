@@ -36,4 +36,6 @@ extern void buildFridge(Object3d fridge, int faces);
 
 extern void buildMicrowave(Object3d microwave, int faces);
 
+extern void buildStove(Object3d stove, int faces);
+
 #endif

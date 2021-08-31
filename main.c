@@ -32,6 +32,7 @@ float WINDOW_ANGLE = 0.0f;
 // Objects
 Object3d fridge;
 Object3d microwave;
+Object3d stove;
 
 void init_gl();
 
@@ -74,19 +75,25 @@ void update(int value) {
 }
 
 int initializeObjects() {
-  fridge = load_obj("./objs/fridge/Fridge.obj", 4);
 
+  fridge = load_obj("./objs/fridge/Fridge.obj", 4);
   if (!fridge.VERTEX_COUNT) {
-    perror("Erro opening fridge .obj file!");
+    printf("Erro opening fridge .obj file!");
     return 0;
   }
 
-  // microwave = load_obj("./objs/microwave/Microwave.obj", 4);
-  // if (!microwave.VERTEX_COUNT) {
-  //   perror("Erro opening microwave .obj file!");
-  //   return 0;
-  // }
-  
+  microwave = load_obj("./objs/microwave/Microwave.obj", 4);
+  if (!microwave.VERTEX_COUNT) {
+    printf("Erro opening microwave .obj file!");
+    return 0;
+  }
+
+  stove = load_obj("./objs/stove/Stove.obj", 4);
+  if (!stove.VERTEX_COUNT) {
+    printf("Erro opening stove .obj file!");
+    return 0;
+  }
+
   return 1;
 }
 
@@ -108,6 +115,7 @@ int main(int argc, char** argv) {
   init_gl();
 
   if (!initializeObjects()) {
+    printf("Failing");
     return -1;
   };
 
@@ -138,8 +146,9 @@ void display() {
   buildKitchen(kitchen);
 
   buildFridge(fridge, 4);
-  // buildMicrowave(microwave, 4);
-  
+  buildMicrowave(microwave, 4);
+  buildStove(stove, 4);
+
   handleDoorAnimation();
   buildDoor(kitchen, DOOR_ANGLE);
 

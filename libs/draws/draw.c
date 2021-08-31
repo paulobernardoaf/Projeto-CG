@@ -272,7 +272,7 @@ void buildWindow(Object kitchen, float windowAngle) {
 }
 
 void buildObject(Object3d object, int faces) {
-  faces == 3 ? glBegin(GL_TRIANGLES) : glBegin(GL_QUADS);
+  faces == 3 ? glBegin(GL_TRIANGLES) : glBegin(GL_LINES); // TODO: CHANGE BACK TO QUADS
   for (int i = 0;i < object.VERTEX_COUNT;i++) {
     glNormal3f(object.NORMALS[i].x, object.NORMALS[i].y, object.NORMALS[i].z);
     glTexCoord2f(object.TEX_COORDS[i].x, object.TEX_COORDS[i].y);
@@ -293,10 +293,20 @@ void buildFridge(Object3d fridge, int faces) {
 
 void buildMicrowave(Object3d microwave, int faces) {
   glPushMatrix(); {
-    // glTranslatef(1.0f, 0.0f, 1.0f);
-    // glScalef(0.015f, 0.015f, 0.15f);
-    // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
-    // glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);
-    // buildObject(microwave, faces);
+    glTranslatef(3.0f, 0.0f, 1.0f);
+    glScalef(0.02f, 0.02f, 0.02f);
+    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    glColor3f(100.0f / 255, 50.0f / 255, 50.0f / 255);
+    buildObject(microwave, faces);
+  } glPopMatrix();
+}
+
+void buildStove(Object3d stove, int faces) {
+  glPushMatrix(); {
+    glTranslatef(5.0f, 0.0f, 1.0f);
+    glScalef(0.04f, 0.04f, 0.04f);
+    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);
+    buildObject(stove, faces);
   } glPopMatrix();
 }

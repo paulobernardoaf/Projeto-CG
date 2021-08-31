@@ -1,9 +1,11 @@
 #ifndef _LOADER_H_
 #define _LOADER_H_
 
+#include <limits.h>
+
 #include "../vector.h"
 
-#define MAX_VERTICES 100000
+#define MAX_VERTICES (size_t)255000
 
 typedef struct Object3d {
   int VERTEX_COUNT;

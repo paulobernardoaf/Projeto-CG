@@ -9,16 +9,18 @@
 Object3d load_obj(char* path, int faces) {
 
   int VERTEX_COUNT = 0;
-  Vec3 VERTICES[MAX_VERTICES];
-  Vec3 NORMALS[MAX_VERTICES];
-  Vec2 TEX_COORDS[MAX_VERTICES];
-
+  Vec3* VERTICES = malloc((size_t)(sizeof(Vec3) * MAX_VERTICES));
+  Vec3* NORMALS = malloc((size_t)(sizeof(Vec3) * MAX_VERTICES));
+  Vec2* TEX_COORDS = malloc((size_t)(sizeof(Vec2) * MAX_VERTICES));
   FILE* fp = fopen(path, "r");
 
-  if (!fp)
-    return (Object3d) { VERTEX_COUNT, VERTICES, NORMALS, TEX_COORDS };;
+  if (!fp) {
+    printf("Couldn't open file %s\n", path);
+    return (Object3d) { VERTEX_COUNT, VERTICES, NORMALS, TEX_COORDS };
+  }
 
-  char buffer[512] = "";
+
+  char buffer[1024] = "";
   int vertex_count = 0;
   int normal_count = 0;
   int tex_coord_count = 0;
@@ -26,7 +28,9 @@ Object3d load_obj(char* path, int faces) {
   Vec3 normals[MAX_VERTICES];
   Vec2 tex_coords[MAX_VERTICES];
 
-  while (fgets(buffer, 512, fp)) {
+  printf("Initialized Variables\n");
+
+  while (fgets(buffer, 1024, fp)) {
     if (buffer[0] == '#') // Comment
       continue;
 
@@ -66,5 +70,5 @@ Object3d load_obj(char* path, int faces) {
 
   fclose(fp);
 
-  return (Object3d){VERTEX_COUNT, VERTICES, NORMALS, TEX_COORDS};
+  return (Object3d) { VERTEX_COUNT, VERTICES, NORMALS, TEX_COORDS };
 }
