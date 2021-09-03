@@ -13,7 +13,7 @@ const float DEG2RAD = M_PI / 180.0f;
 const float RAD2DEG = 180.0f / M_PI;
 
 void initializeCamera(Camera* cam) {
-  cam->position = (Vec3){ 2.0f, 2.0f, 2.0f };
+  cam->position = (Vec3){ 2.0f, 2.3f, 2.0f };
   cam->rotation = (Vec3){ 0.0f, 180.0f, 0.0f };
 }
 

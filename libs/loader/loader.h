@@ -5,7 +5,7 @@
 
 #include "../vector.h"
 
-#define MAX_VERTICES (size_t)255000
+#define MAX_VERTICES (size_t)210000
 
 typedef struct Object3d {
   int VERTEX_COUNT;

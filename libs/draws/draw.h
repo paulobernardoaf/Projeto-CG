@@ -22,9 +22,9 @@ extern void draw_grid(int n, int m);
 
 extern void buildKitchen(Object kitchen);
 
-extern void buildBlock(Object block, Vec3 origin, Color color);
+extern void buildBlock(Object block, Color color);
 
-extern void buildFace(Vec3 vertices[], Vec3 origin, Color color);
+extern void buildFace(Vec3 vertices[], Color color);
 
 extern void buildDoor(Object kitchen, float doorAngle);
 
@@ -37,5 +37,13 @@ extern void buildFridge(Object3d fridge, int faces);
 extern void buildMicrowave(Object3d microwave, int faces);
 
 extern void buildStove(Object3d stove, int faces);
+
+extern void buildTap(Object3d tap, int faces);
+
+extern void buildChair(Object3d chair, int faces);
+
+extern void buildCabinet(Object kitchen);
+
+extern void buildTable();
 
 #endif

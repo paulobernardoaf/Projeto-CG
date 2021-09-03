@@ -33,6 +33,8 @@ float WINDOW_ANGLE = 0.0f;
 Object3d fridge;
 Object3d microwave;
 Object3d stove;
+Object3d tap;
+Object3d chair;
 
 void init_gl();
 
@@ -94,6 +96,18 @@ int initializeObjects() {
     return 0;
   }
 
+  tap = load_obj("./objs/tap/tap.obj", 4);
+  if (!tap.VERTEX_COUNT) {
+    printf("Erro opening stove .obj file!");
+    return 0;
+  }
+  
+  chair = load_obj("./objs/chair/chair.obj", 4);
+  if (!chair.VERTEX_COUNT) {
+    printf("Erro opening stove .obj file!");
+    return 0;
+  }
+
   return 1;
 }
 
@@ -148,6 +162,11 @@ void display() {
   buildFridge(fridge, 4);
   buildMicrowave(microwave, 4);
   buildStove(stove, 4);
+  buildTap(tap, 4);
+  buildChair(chair, 4);
+
+  buildCabinet(kitchen);
+  buildTable();
 
   handleDoorAnimation();
   buildDoor(kitchen, DOOR_ANGLE);
