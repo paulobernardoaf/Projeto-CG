@@ -9,51 +9,6 @@
 #include <GL/gl.h>
 #include <GL/freeglut.h>
 
-void draw_axis(int x, int y, int z) {
-
-  glLineWidth(3.0f);
-  glBegin(GL_LINES);
-  if (x) {
-    glColor3f(RED);
-    glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(ZFAR, 0.0f, 0.0f);
-  }
-  if (y) {
-    glColor3f(GREEN);
-    glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(0.0f, ZFAR, 0.0f);
-  }
-  if (z) {
-    glColor3f(BLUE);
-    glVertex3f(0.0f, 0.0f, 0.0f);
-    glVertex3f(0.0f, 0.0f, ZFAR);
-  }
-  glEnd();
-  glLineWidth(1.0f);
-
-}
-
-void draw_grid(int n, int m) {
-
-  int i;
-
-  glBegin(GL_LINES);
-  glColor3f(WHITE);
-  for (i = 0;i <= n;i++) {
-    float d = (float)i;
-    // Parallel to x-axis 
-    glVertex3f(0, 0.01f, d);
-    glVertex3f(m, 0.01f, d);
-  }
-  for (i = 0;i <= m;i++) {
-    float d = (float)i;
-    // Parallel to z-axis
-    glVertex3f(d, 0.01f, 0);
-    glVertex3f(d, 0.01f, n);
-  }
-  glEnd();
-
-}
 
 void buildFace(Vec3 vertices[], Color color) {
 
@@ -157,7 +112,6 @@ void buildLeftWall(Object wall, Color color) {
 
   // top
   glPushMatrix(); {
-    color = (Color){ 110.0f, 0.0f, 149.0f };
     Object top = (Object){ wall.width, wall.height / 4, wall.depth / 6 };
     glTranslatef(0.0f, 3 * wall.height / 4, 5 * wall.depth / 6);
     buildBlock(top, color);
@@ -165,7 +119,6 @@ void buildLeftWall(Object wall, Color color) {
 
   // left
   glPushMatrix(); {
-    color = (Color){ 113.0f, 111.0f, 129.0f };
     Object left = (Object){ wall.width, wall.height, 5 * wall.depth / 6 };
     buildBlock(left, color);
   } glPopMatrix();
@@ -181,51 +134,45 @@ void buildKitchen(Object kitchen) {
 
   // floor
   glPushMatrix(); {
-    color = (Color){ 113.0f, 111.0f, 129.0f };
+    color = (Color){ 216.0f, 207.0f, 205.0f };
     wall = (Object){ kitchen.width, 0.0f, kitchen.depth };
-    // origin = (Vec3){ 0.0f, 0.0f, 0.0f };
     buildBlock(wall, color);
   } glPopMatrix();
   glPushMatrix(); {
 
     // ceil
-    color = (Color){ 255.0f, 0.0f, 149.0f };
+    color = (Color){ 113.0f, 111.0f, 129.0f };
     wall = (Object){ kitchen.width, 0.0f, kitchen.depth };
-    // origin = (Vec3){ 0.0f, kitchen.height, 0.0f };
     glTranslatef(0.0f, kitchen.height, 0.0f);
     buildBlock(wall, color);
   } glPopMatrix();
 
   // front wall
   glPushMatrix(); {
-    color = (Color){ 243.0f, 139.0f, 160.0f };
+    color = (Color){ 230.0f, 233.0f, 233.0f };
     wall = (Object){ kitchen.width, kitchen.height, 0.0f };
-    // origin = (Vec3){ 0.0f, 0.0f, 0.0f };
     buildBlock(wall, color);
   } glPopMatrix();
 
   // back wall
   glPushMatrix(); {
-    color = (Color){ 246.0f, 174.0f, 153.0f };
+    color = (Color){ 230.0f, 233.0f, 233.0f };
     wall = (Object){ kitchen.width, kitchen.height, wallDepth };
-    // origin = (Vec3){ 0.0f, 0.0f, kitchen.depth };
     glTranslatef(0.0f, 0.0f, kitchen.depth);
     buildBackWall(wall, color);
   } glPopMatrix();
 
   // right wall
   glPushMatrix(); {
-    color = (Color){ 242.0f, 225.0f, 193.0f };
+    color = (Color){ 124.0f, 141.0f, 148.0f };
     wall = (Object){ 0.0f, kitchen.height, kitchen.depth };
-    // origin = (Vec3){ 0.0f, 0.0f, 0.0f };
     buildBlock(wall, color);
   } glPopMatrix();
 
   // left wall
   glPushMatrix(); {
-    color = (Color){ 255.0f, 0.0f, 0.0f };
+    color = (Color){ 124.0f, 141.0f, 148.0f };
     wall = (Object){ wallDepth, kitchen.height, kitchen.depth };
-    // origin = (Vec3){ kitchen.width, 0.0f, 0.0f };
     glTranslatef(kitchen.width, 0.0f, 0.0f);
     buildLeftWall(wall, color);
   } glPopMatrix();
@@ -252,7 +199,7 @@ void buildDoor(Object kitchen, float doorAngle) {
 
     // door fix
     glPushMatrix(); {
-      color = (Color){ 240.0f, 0.0f, 240.0f };
+      color = (Color){ 124.0f, 141.0f, 148.0f };
       wall = (Object){ doorDepth, 3 * kitchen.height / 4, 0.25f };
       glTranslatef(kitchen.width - 0.001f, 0.0f, kitchen.depth - doorDepth + 0.001f);
       buildBlock(wall, color);
@@ -333,7 +280,7 @@ void buildMicrowave(Object3d microwave, int faces) {
     glPushMatrix(); {
       Object section = (Object){ 1.25f, 0.1f, 1.2f };
       glTranslatef(0.001f, 1.9f, 7.4f);
-      Color color = (Color){ 255.0f, 50.0f, 50.0f };
+      Color color = (Color){ 200.0f, 206.0f, 212.0f };
       buildBlock(section, color);
     } glPopMatrix();
 
@@ -408,12 +355,11 @@ void buildChair(Object3d chair, int faces) {
 void buildCabinet(Object kitchen) {
   glPushMatrix(); {
 
-    Color color;
+    Color color = (Color){ 221, 196, 165 };
     Object section;
 
     // bottom section
     glPushMatrix(); {
-      color = (Color){ 240.0f, 240.0f, 240.0f };
       section = (Object){ 1.25f, 1.5f, 3.0f };
       glTranslatef(kitchen.width - 1.25f, 0.0f, 5.0f);
       buildBlock(section, color);
@@ -429,7 +375,6 @@ void buildCabinet(Object kitchen) {
 
     // top section
     glPushMatrix(); {
-      color = (Color){ 240.0f, 240.0f, 240.0f };
       section = (Object){ 1.25f, 1.5f, 7.0f };
       glTranslatef(kitchen.width - 1.25f, 3.0f, 5.0f);
       buildBlock(section, color);
@@ -439,17 +384,10 @@ void buildCabinet(Object kitchen) {
     glPushMatrix(); {
 
       glTranslatef(kitchen.width - 1.0f, 1.3f, 8.0f);
-      //bottom
-      glPushMatrix(); {
-        color = (Color){ 0.0f, 140.0f, 240.0f };
-        section = (Object){ 1.0f, 0.1f, 1.0f };
-        // glTranslatef(2.0f, 1.5f, 4.0f);
-        buildBlock(section, color);
-      } glPopMatrix();
 
-      // left
+      color = (Color){ 186, 151, 124 };
+        // left
       glPushMatrix(); {
-        color = (Color){ 0.0f, 240.0f, 240.0f };
         section = (Object){ 1.0f, 0.2f, 0.1f };
         glTranslatef(0.0f, 0.1f, 0.0f);
         // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
@@ -458,7 +396,6 @@ void buildCabinet(Object kitchen) {
 
       // right
       glPushMatrix(); {
-        color = (Color){ 0.0f, 240.0f, 240.0f };
         section = (Object){ 1.0f, 0.2f, 0.1f };
         glTranslatef(0.0f, 0.1f, 0.9f);
         // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
@@ -467,7 +404,6 @@ void buildCabinet(Object kitchen) {
 
       // front
       glPushMatrix(); {
-        color = (Color){ 0.0f, 240.0f, 240.0f };
         section = (Object){ 0.1f, 0.2f, 1.0f };
         glTranslatef(0.0f, 0.1f, 0.0f);
         // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
@@ -476,10 +412,17 @@ void buildCabinet(Object kitchen) {
 
       // back
       glPushMatrix(); {
-        color = (Color){ 0.0f, 240.0f, 240.0f };
         section = (Object){ 0.1f, 0.2f, 1.0f };
         glTranslatef(0.9f, 0.1f, 0.0f);
         // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+        buildBlock(section, color);
+      } glPopMatrix();
+
+      //bottom
+      glPushMatrix(); {
+        color = (Color){ 0.0f, 140.0f, 240.0f };
+        section = (Object){ 1.0f, 0.1f, 1.0f };
+        // glTranslatef(2.0f, 1.5f, 4.0f);
         buildBlock(section, color);
       } glPopMatrix();
 
@@ -500,7 +443,7 @@ void buildTable() {
   glPushMatrix(); {
     Object section;
     Object topSection;
-    Color color = (Color){ 80.0f, 60.0f, 0.0f };
+    Color color = (Color){ 163.0f, 128.0f, 97.0f };
 
     // board
     glPushMatrix(); {

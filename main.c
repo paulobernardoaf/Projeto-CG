@@ -155,8 +155,6 @@ void display() {
 
   setupCamera(&CAM);
 
-  draw_grid(15, 9);
-  draw_axis(1, 1, 1);
   Object kitchen = (Object){ 9.0f, 5.0f, 15.0f };
   buildKitchen(kitchen);
 
