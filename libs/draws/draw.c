@@ -150,7 +150,8 @@ void buildKitchen(Object kitchen) {
   // front wall
   glPushMatrix(); {
     color = (Color){ 230.0f, 233.0f, 233.0f };
-    wall = (Object){ kitchen.width, kitchen.height, 0.0f };
+    wall = (Object){ kitchen.width, kitchen.height, wallDepth };
+    glTranslatef(0.0f, 0.0f, -wallDepth);
     buildBlock(wall, color);
   } glPopMatrix();
 
@@ -165,7 +166,8 @@ void buildKitchen(Object kitchen) {
   // right wall
   glPushMatrix(); {
     color = (Color){ 124.0f, 141.0f, 148.0f };
-    wall = (Object){ 0.0f, kitchen.height, kitchen.depth };
+    wall = (Object){ wallDepth, kitchen.height, kitchen.depth };
+    glTranslatef(-wallDepth, 0.0f, 0.0f);
     buildBlock(wall, color);
   } glPopMatrix();
 
@@ -321,7 +323,6 @@ void buildChair(Object3d chair, int faces) {
     glPushMatrix(); {
       glTranslatef(2.0f, 1.0f, 1.0f);
       glScalef(0.4f, 0.4f, 0.4f);
-      // glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
       glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);
       buildObject(chair, faces);
     } glPopMatrix();
@@ -356,7 +357,8 @@ void buildCabinet(Object kitchen) {
   glPushMatrix(); {
 
     Color color = (Color){ 221, 196, 165 };
-    Object section;
+    Color pullerColor = (Color){ 22, 35, 45 };
+    Object section, door, puller;
 
     // bottom section
     glPushMatrix(); {
@@ -371,6 +373,7 @@ void buildCabinet(Object kitchen) {
       section = (Object){ 1.25f, 1.5f, 3.0f };
       glTranslatef(0.0f, 0.0f, 1.0f);
       buildBlock(section, color);
+
     } glPopMatrix();
 
     // top section
@@ -380,17 +383,130 @@ void buildCabinet(Object kitchen) {
       buildBlock(section, color);
     } glPopMatrix();
 
+    // top doors
+    color = (Color){ 186, 151, 124 };
+    puller = (Object){ 0.05f, 0.7f, 0.05f };
+    glPushMatrix(); {
+      door = (Object){ 0.05f, 1.3f, 1.0f };
+      glTranslatef(kitchen.width - 1.3f, 3.1f, 5.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.1f, 0.85f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, 0.0f, 1.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.1f, 0.1f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, 0.0f, 1.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.1f, 0.85f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, 0.0f, 1.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.1f, 0.1f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, 0.0f, 1.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.1f, 0.85f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, 0.0f, 1.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.1f, 0.1f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+    } glPopMatrix();
+
+
+    // bottom doors
+    color = (Color){ 186, 151, 124 };
+    glPushMatrix(); {
+      door = (Object){ 0.05f, 1.3f, 1.0f };
+      glTranslatef(kitchen.width - 1.3f, 0.1f, 5.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.5f, 0.85f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, 0.0f, 1.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.5f, 0.1f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, 0.0f, 1.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.5f, 0.85f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, 0.0f, 1.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.5f, 0.1f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, 0.0f, 1.15f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.5f, 0.85f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+    } glPopMatrix();
+
+    // drawers
+    puller = (Object){ 0.05f, 0.05f, 0.6f };
+    glPushMatrix(); {
+      door = (Object){ 0.05f, 0.4f, 1.0f };
+      glTranslatef(kitchen.width - 1.3f, 1.0f, 10.9f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.3f, 0.2f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, -0.45f, 0.0f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.3f, 0.2f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+
+      glTranslatef(0.0f, -0.45f, 0.0f);
+      buildBlock(door, color);
+      glPushMatrix(); {
+        glTranslatef(-0.05f, 0.3f, 0.2f);
+        buildBlock(puller, pullerColor);
+      } glPopMatrix();
+    } glPopMatrix();
+
     // sink
     glPushMatrix(); {
 
       glTranslatef(kitchen.width - 1.0f, 1.3f, 8.0f);
 
-      color = (Color){ 186, 151, 124 };
-        // left
+      // left
       glPushMatrix(); {
         section = (Object){ 1.0f, 0.2f, 0.1f };
         glTranslatef(0.0f, 0.1f, 0.0f);
-        // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
         buildBlock(section, color);
       } glPopMatrix();
 
@@ -398,7 +514,6 @@ void buildCabinet(Object kitchen) {
       glPushMatrix(); {
         section = (Object){ 1.0f, 0.2f, 0.1f };
         glTranslatef(0.0f, 0.1f, 0.9f);
-        // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
         buildBlock(section, color);
       } glPopMatrix();
 
@@ -406,7 +521,6 @@ void buildCabinet(Object kitchen) {
       glPushMatrix(); {
         section = (Object){ 0.1f, 0.2f, 1.0f };
         glTranslatef(0.0f, 0.1f, 0.0f);
-        // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
         buildBlock(section, color);
       } glPopMatrix();
 
@@ -414,7 +528,6 @@ void buildCabinet(Object kitchen) {
       glPushMatrix(); {
         section = (Object){ 0.1f, 0.2f, 1.0f };
         glTranslatef(0.9f, 0.1f, 0.0f);
-        // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
         buildBlock(section, color);
       } glPopMatrix();
 
@@ -422,7 +535,6 @@ void buildCabinet(Object kitchen) {
       glPushMatrix(); {
         color = (Color){ 0.0f, 140.0f, 240.0f };
         section = (Object){ 1.0f, 0.1f, 1.0f };
-        // glTranslatef(2.0f, 1.5f, 4.0f);
         buildBlock(section, color);
       } glPopMatrix();
 
@@ -431,7 +543,6 @@ void buildCabinet(Object kitchen) {
         color = (Color){ 0.0f, 0.0f, 0.0f };
         section = (Object){ 0.1f, 0.1f, 0.1f };
         glTranslatef(0.5f, 0.001f, 0.45f);
-        // glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
         buildBlock(section, color);
       } glPopMatrix();
     } glPopMatrix();
