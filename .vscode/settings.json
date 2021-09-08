@@ -2,6 +2,7 @@
   "files.associations": {
     "vector.h": "c",
     "colors.h": "c",
-    "loader.h": "c"
+    "loader.h": "c",
+    "functional": "c"
   }
 }

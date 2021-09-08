@@ -16,6 +16,8 @@
 #define WINDOW_HEIGHT 9*75
 // Global variables
 
+const float DEG2RAD = M_PI / 180.0f;
+float speed = 0.1f;
 Vec2 WINDOW_SIZE = { WINDOW_WIDTH, WINDOW_HEIGHT };
 Vec2 WINDOW_CENTER = { WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2 };
 float FOVY = 60.0f;
@@ -38,8 +40,6 @@ Object3d chair;
 
 void init_gl();
 
-// Callbacks
-
 void display();
 
 void motion(int x, int y);
@@ -54,26 +54,27 @@ void update(int value) {
 
   float MOVEMENT_SPEED = 2.0f;
 
-  // Forward movement
-  int move_forward = KEYBOARD['w'] - KEYBOARD['s'];
-  Vec3 fwd = forward(&CAM);
+  Vec3 forward = (Vec3){ 0.0f, 0.0f, 0.0f };
+  Vec3 backwards;
 
-  fwd.x *= move_forward;
-  fwd.y = 0.0f; // Projects fwd in the xz plane
-  fwd.z *= move_forward;
+  if (KEYBOARD['w']) {
+    move_forward(&CAM);
+  }
 
-  // Lateral movement
-  int move_right = KEYBOARD['d'] - KEYBOARD['a'];
-  Vec3 rgt = right(&CAM);
+  if (KEYBOARD['s']) {
+    move_backward(&CAM);
+  }
 
-  rgt.x *= move_right;
-  rgt.z *= move_right;
+  if (KEYBOARD['d']) {
+    move_right(&CAM);
+  }
 
-  CAM.position.x += 0.1f * (fwd.x + rgt.x) * MOVEMENT_SPEED;
-  CAM.position.z += 0.1f * (fwd.z + rgt.z) * MOVEMENT_SPEED;
+  if (KEYBOARD['a']) {
+    move_left(&CAM);
+  }
 
   glutPostRedisplay();
-  glutTimerFunc(5, update, 0);
+  glutTimerFunc(15, update, 0);
 }
 
 int initializeObjects() {
@@ -101,7 +102,7 @@ int initializeObjects() {
     printf("Erro opening stove .obj file!");
     return 0;
   }
-  
+
   chair = load_obj("./objs/chair/chair.obj", 4);
   if (!chair.VERTEX_COUNT) {
     printf("Erro opening stove .obj file!");
@@ -124,7 +125,7 @@ int main(int argc, char** argv) {
   glutKeyboardFunc(keyboard);
   glutKeyboardUpFunc(keyboard_up);
   glutReshapeFunc(reshape);
-  glutTimerFunc(5, update, 0);
+  glutTimerFunc(15, update, 0);
 
   init_gl();
 
@@ -177,23 +178,32 @@ void display() {
   glutSwapBuffers();
 }
 
+void normalizeVector(Vec3* vec) {
+  float magnitude = sqrt((vec->x * vec->x) + (vec->y * vec->y) + (vec->z * vec->z));
+
+  vec->x = vec->x / magnitude;
+  vec->y = vec->y / magnitude;
+  vec->z = vec->z / magnitude;
+}
+
 void motion(int x, int y) {
-  static int wrap = 0;
   Vec2 delta;
+  
+  delta.x = x - WINDOW_CENTER.x;
+  delta.y = y - WINDOW_CENTER.y;
 
-  if (!wrap) {
-    delta.x = x - WINDOW_CENTER.x;
-    delta.y = y - WINDOW_CENTER.y;
-
-    CAM.rotation.x += delta.y > 0 ? -1.0f : (delta.y < 0 ? 1.0f : 0.0f);
-    CAM.rotation.y -= delta.x > 0 ? 1.0f : (delta.x < 0 ? -1.0f : 0.0f);
-
-    wrap = 1;
-    glutWarpPointer(WINDOW_CENTER.x, WINDOW_CENTER.y);
+  if (delta.y > 89.0f) {
+    delta.y = 89.0f;
   }
-  else {
-    wrap = 0;
+  if (delta.y < -89.0f) {
+    delta.y = -89.0f;
   }
+
+  CAM.forward.x = cos(delta.x * DEG2RAD) * cos(delta.y * DEG2RAD);
+  CAM.forward.y = sin(-delta.y * DEG2RAD);
+  CAM.forward.z = sin(delta.x * DEG2RAD) * cos(delta.y * DEG2RAD);
+
+  normalizeVector(&CAM.forward);
 }
 
 void keyboard(unsigned char key, int x, int y) {

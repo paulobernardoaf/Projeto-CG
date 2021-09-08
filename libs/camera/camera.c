@@ -1,5 +1,6 @@
 #include "camera.h"
 #include "../vector.h"
+#include <stdio.h>
 
 #include <math.h>
 #include <ctype.h>
@@ -7,66 +8,62 @@
 #include <GL/gl.h>
 #include <GL/freeglut.h>
 
-// Constants
-
-const float DEG2RAD = M_PI / 180.0f;
-const float RAD2DEG = 180.0f / M_PI;
 
 void initializeCamera(Camera* cam) {
-  cam->position = (Vec3){ 2.0f, 2.3f, 2.0f };
-  cam->rotation = (Vec3){ 0.0f, 180.0f, 0.0f };
+  cam->position = (Vec3){ 3.0f, 2.3f, 4.0f };
+  cam->forward = (Vec3){ 0.0f, 0.0f, 1.0f };
+  cam->up = (Vec3){ 0.0f, 1.0f, 0.0f };
 }
 
 void setupCamera(Camera* cam) {
   glMatrixMode(GL_MODELVIEW);
   glLoadIdentity();
 
-  // View matrix
-  Vec3 fwd = forward(cam);
-  Vec3 u = up(cam);
+  Vec3 up = cam->up;
   Vec3 eye = cam->position;
-  Vec3 center = { eye.x + fwd.x, eye.y + fwd.y, eye.z + fwd.z };
+  Vec3 center = { eye.x + cam->forward.x, eye.y + cam->forward.y, eye.z + cam->forward.z };
 
-  gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, u.x, u.y, u.z);
+  gluLookAt(eye.x, eye.y, eye.z, center.x, center.y, center.z, cam->up.x, cam->up.y, cam->up.z);
 }
 
-// Math utils
-
-Vec3 forward(Camera* cam) {
-  Vec3 v;
-  float a = cam->rotation.x * DEG2RAD;
-  float b = cam->rotation.y * DEG2RAD;
-  float c = cam->rotation.z * DEG2RAD;
-
-  v.x = -(sin(c) * sin(a) + cos(c) * sin(b) * cos(a));
-  v.y = -(-cos(c) * sin(a) + sin(c) * sin(b) * cos(a));
-  v.z = -(cos(b) * cos(a));
-
-  return v;
+void move_forward(Camera* cam) {
+  const float speed = 0.1f;
+  cam->position.x += cam->forward.x * speed;
+  cam->position.y += cam->forward.y * speed;
+  cam->position.z += cam->forward.z * speed;
 }
 
-Vec3 up(Camera* cam) {
-  Vec3 v;
-  float a = cam->rotation.x * DEG2RAD;
-  float b = cam->rotation.y * DEG2RAD;
-  float c = cam->rotation.z * DEG2RAD;
-
-  v.x = -sin(c) * cos(a) + cos(c) * sin(b) * sin(a);
-  v.y = cos(c) * cos(a) + sin(c) * sin(b) * sin(a);
-  v.z = cos(b) * sin(a);
-
-  return v;
+void move_backward(Camera* cam) {
+  const float speed = 0.1f;
+  cam->position.x -= cam->forward.x * speed;
+  cam->position.y -= cam->forward.y * speed;
+  cam->position.z -= cam->forward.z * speed;
 }
 
-Vec3 right(Camera* cam) {
-  Vec3 v;
-  float a = cam->rotation.x * DEG2RAD;
-  float b = cam->rotation.y * DEG2RAD;
-  float c = cam->rotation.z * DEG2RAD;
+void move_right(Camera* cam) {
+  const float speed = 0.1f;
 
-  v.x = cos(c) * cos(b);
-  v.y = sin(c) * cos(b);
-  v.z = -sin(b);
+  Vec3 movementDirection = crossProduct((Vec3) { cam->forward.x, cam->forward.y, cam->forward.z }, (Vec3) { 0.0f, 1.0f, 0.0f });
 
-  return v;
+  cam->position.x += movementDirection.x * speed;
+  cam->position.y += movementDirection.y * speed;
+  cam->position.z += movementDirection.z * speed;
+}
+
+void move_left(Camera* cam) {
+  const float speed = 0.1f;
+
+  Vec3 movementDirection = crossProduct((Vec3) { cam->forward.x, cam->forward.y, cam->forward.z }, (Vec3) { 0.0f, 1.0f, 0.0f });
+  cam->position.x -= movementDirection.x * speed;
+  cam->position.y -= movementDirection.y * speed;
+  cam->position.z -= movementDirection.z * speed;
+}
+
+Vec3 crossProduct(Vec3 a, Vec3 b) {
+  Vec3 c;
+  c.x = a.y * b.z - a.z * b.y;
+  c.y = a.z * b.x - a.x * b.z;
+  c.z = a.x * b.y - a.y * b.x;
+
+  return c;
 }
