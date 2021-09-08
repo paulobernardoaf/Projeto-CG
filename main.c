@@ -29,7 +29,7 @@ int DOOR_STEP = 3;
 float DOOR_ANGLE = 0.0f;
 
 int WINDOW_STEP = 1;
-float WINDOW_ANGLE = 0.0f;
+float WINDOW_ANGLE = -45.0f;
 
 // Objects
 Object3d fridge;
@@ -186,9 +186,10 @@ void normalizeVector(Vec3* vec) {
 
 void motion(int x, int y) {
   Vec2 delta;
-  
-  delta.x = x - WINDOW_CENTER.x;
-  delta.y = y - WINDOW_CENTER.y;
+  float speed = 0.8f;
+
+  delta.x = (x - WINDOW_CENTER.x) * speed;
+  delta.y = (y - WINDOW_CENTER.y) * speed;
 
   if (delta.y > 89.0f) {
     delta.y = 89.0f;
