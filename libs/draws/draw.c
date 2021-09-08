@@ -239,14 +239,25 @@ void buildDoor(Object kitchen, float doorAngle) {
 
   float doorDepth = 0.125f;
 
-  glPushMatrix();
-  color = (Color){ 240.0f, 240.0f, 240.0f };
-  wall = (Object){ doorDepth, 3 * kitchen.height / 4, kitchen.depth / 6 - doorDepth };
-  glTranslatef(kitchen.width + doorDepth, 0.0f, kitchen.depth - doorDepth);
-  glRotatef(180.0f + doorAngle, 0.0f, 1.0f, 0.0f);
-  buildBlock(wall, color);
+  glPushMatrix(); {
 
-  glPopMatrix();
+    // door
+    glPushMatrix(); {
+      color = (Color){ 240.0f, 240.0f, 240.0f };
+      wall = (Object){ doorDepth, 3 * kitchen.height / 4, kitchen.depth / 6 - doorDepth };
+      glTranslatef(kitchen.width + doorDepth, 0.0f, kitchen.depth - doorDepth);
+      glRotatef(180.0f + doorAngle, 0.0f, 1.0f, 0.0f);
+      buildBlock(wall, color);
+    } glPopMatrix();
+
+    // door fix
+    glPushMatrix(); {
+      color = (Color){ 240.0f, 0.0f, 240.0f };
+      wall = (Object){ doorDepth, 3 * kitchen.height / 4, 0.25f };
+      glTranslatef(kitchen.width - 0.001f, 0.0f, kitchen.depth - doorDepth + 0.001f);
+      buildBlock(wall, color);
+    } glPopMatrix();
+  } glPopMatrix();
 }
 
 void buildWindow(Object kitchen, float windowAngle) {
@@ -339,8 +350,8 @@ void buildMicrowave(Object3d microwave, int faces) {
 
 void buildStove(Object3d stove, int faces) {
   glPushMatrix(); {
-    glTranslatef(0.7f, 0.0f, 7.0f);
-    glScalef(0.04f, 0.04f, 0.04f);
+    glTranslatef(1.05f, 0.0f, 7.0f);
+    glScalef(0.06f, 0.04f, 0.04f);
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
     glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
     glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);

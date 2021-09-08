@@ -28,8 +28,6 @@ Object3d load_obj(char* path, int faces) {
   Vec3 normals[MAX_VERTICES];
   Vec2 tex_coords[MAX_VERTICES];
 
-  printf("Initialized Variables\n");
-
   while (fgets(buffer, 1024, fp)) {
     if (buffer[0] == '#') // Comment
       continue;

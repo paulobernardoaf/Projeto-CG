@@ -11,11 +11,6 @@ typedef struct Object {
   float width, height, depth;
 } Object;
 
-typedef struct Rotation {
-  float degrees;
-  Vec3 axis;
-} Rotation;
-
 extern void draw_axis(int x, int y, int z);
 
 extern void draw_grid(int n, int m);
