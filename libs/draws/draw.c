@@ -675,3 +675,20 @@ void buildTable(Texture texture) {
     glDisable(GL_TEXTURE_2D);
   } glPopMatrix();
 }
+
+void buildLamp(Object3d lamp, int faces, Texture texture) {
+  glPushMatrix(); {
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
+
+    glTranslatef(4.71f, 1.6f, 0.25f);
+    glScalef(0.015f, 0.015f, 0.015f);
+    glRotatef(140.0f, 0.0f, 1.0f, 0.0f);
+    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    buildObject(lamp, faces);
+
+    glFlush();
+    glDisable(GL_TEXTURE_2D);
+  } glPopMatrix();
+}

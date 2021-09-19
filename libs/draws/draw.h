@@ -37,4 +37,6 @@ extern void buildCabinet(Object kitchen);
 
 extern void buildTable(Texture texture);
 
+extern void buildLamp(Object3d lamp, int faces, Texture texture);
+
 #endif

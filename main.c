@@ -37,6 +37,7 @@ Object3d microwave;
 Object3d stove;
 Object3d tap;
 Object3d chair;
+Object3d lamp;
 
 // Textures
 Texture microwaveTexture;
@@ -46,6 +47,7 @@ Texture chairTexture;
 Texture tableTexture;
 Texture tapTexture;
 Texture doorTexture;
+Texture lampTexture;
 
 void init_gl();
 
@@ -117,6 +119,12 @@ int initializeObjects() {
     return 0;
   }
 
+  lamp = load_obj("./objs/lamp/lamp.obj", 4);
+  if (!lamp.VERTEX_COUNT) {
+    printf("Erro opening stove .obj file!");
+    return 0;
+  }
+
   return 1;
 }
 
@@ -141,6 +149,9 @@ void initializeTextures() {
   
   load_texture("./objs/door_texture.png", &doorTexture);
   setupTexture(&doorTexture);
+
+  load_texture("./objs/lamp/lamp_texture.jpg", &lampTexture);
+  setupTexture(&lampTexture);
 
 }
 
@@ -197,6 +208,7 @@ void display() {
   buildStove(stove, 4, stoveTexture);
   buildTap(tap, 4, tapTexture);
   buildChair(chair, 4, chairTexture);
+  buildLamp(lamp, 4, lampTexture);
 
   buildCabinet(kitchen);
   buildTable(tableTexture);
