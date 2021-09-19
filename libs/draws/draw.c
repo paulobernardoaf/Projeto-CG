@@ -10,12 +10,13 @@
 #include <GL/freeglut.h>
 
 
-void buildFace(Vec3 vertices[], Color color) {
+void buildFace(Vec3 vertices[], Color color, Vec2 texCoord[]) {
 
   glBegin(GL_QUADS);
   glColor3f(color.red / 255, color.green / 255, color.blue / 255);
 
   for (int i = 0; i < 4; i++) {
+    glTexCoord2f(texCoord[i].x, texCoord[i].y);
     glVertex3f(vertices[i].x, vertices[i].y, vertices[i].z);
   }
 
@@ -25,54 +26,88 @@ void buildFace(Vec3 vertices[], Color color) {
 
 void buildBlock(Object block, Color color) {
 
-  glPushMatrix();
-  Vec3 vertices[4];
-  float width = block.width;
-  float height = block.height;
-  float depth = block.depth;
+  glPushMatrix(); {
+    GLfloat texCoordH = 1.0;
+    GLfloat texCoordV = 1.0;
 
-  // Bottom
-  vertices[0] = (Vec3){ 0.0f, 0.0f, 0.0f };
-  vertices[1] = (Vec3){ width, 0.0f, 0.0f };
-  vertices[2] = (Vec3){ width, 0.0f, depth };
-  vertices[3] = (Vec3){ 0.0f, 0.0f, depth };
-  buildFace(vertices, color);
+    Vec3 vertices[4];
+    Vec2 texCoord[4];
+    float width = block.width;
+    float height = block.height;
+    float depth = block.depth;
 
-  // Top
-  vertices[0] = (Vec3){ 0.0f, height, 0.0f };
-  vertices[1] = (Vec3){ 0.0f, height, depth };
-  vertices[2] = (Vec3){ width, height, depth };
-  vertices[3] = (Vec3){ width, height, 0.0f };
-  buildFace(vertices, color);
+    // Bottom
+    vertices[0] = (Vec3){ 0.0f, 0.0f, 0.0f };
+    vertices[1] = (Vec3){ width, 0.0f, 0.0f };
+    vertices[2] = (Vec3){ width, 0.0f, depth };
+    vertices[3] = (Vec3){ 0.0f, 0.0f, depth };
 
-  // Front
-  vertices[0] = (Vec3){ 0.0f, 0.0f, 0.0f };
-  vertices[1] = (Vec3){ 0.0f, height, 0.0f };
-  vertices[2] = (Vec3){ width, height, 0.0f };
-  vertices[3] = (Vec3){ width, 0.0f, 0.0f };
-  buildFace(vertices, color);
+    texCoord[0] = (Vec2){ 0.0, 0.0 };
+    texCoord[1] = (Vec2){ 0.0, texCoordV };
+    texCoord[2] = (Vec2){ texCoordH, texCoordV };
+    texCoord[3] = (Vec2){ texCoordH, 0.0 };
+    buildFace(vertices, color, texCoord);
 
-  // Back
-  vertices[0] = (Vec3){ 0.0f, 0.0f, depth };
-  vertices[1] = (Vec3){ width, 0.0f, depth };
-  vertices[2] = (Vec3){ width, height, depth };
-  vertices[3] = (Vec3){ 0.0f, height, depth };
-  buildFace(vertices, color);
+    // Top
+    vertices[0] = (Vec3){ 0.0f, height, 0.0f };
+    vertices[1] = (Vec3){ 0.0f, height, depth };
+    vertices[2] = (Vec3){ width, height, depth };
+    vertices[3] = (Vec3){ width, height, 0.0f };
 
-  // Left
-  vertices[0] = (Vec3){ width, 0.0f, depth };
-  vertices[1] = (Vec3){ width, 0.0f, 0.0f };
-  vertices[2] = (Vec3){ width, height, 0.0f };
-  vertices[3] = (Vec3){ width, height, depth };
-  buildFace(vertices, color);
+    texCoord[0] = (Vec2){ 0.0, 0.0 };
+    texCoord[1] = (Vec2){ texCoordH, 0.0 };
+    texCoord[2] = (Vec2){ texCoordH, texCoordV };
+    texCoord[3] = (Vec2){ 0.0, texCoordV };
+    buildFace(vertices, color, texCoord);
 
-  // Right
-  vertices[0] = (Vec3){ 0.0f, 0.0f, 0.0f };
-  vertices[1] = (Vec3){ 0.0f, 0.0f, depth };
-  vertices[2] = (Vec3){ 0.0f, height, depth };
-  vertices[3] = (Vec3){ 0.0f, height, 0.0f };
-  buildFace(vertices, color);
-  glPopMatrix();
+    // Front
+    vertices[0] = (Vec3){ 0.0f, 0.0f, 0.0f };
+    vertices[1] = (Vec3){ 0.0f, height, 0.0f };
+    vertices[2] = (Vec3){ width, height, 0.0f };
+    vertices[3] = (Vec3){ width, 0.0f, 0.0f };
+
+    texCoord[0] = (Vec2){ 0.0, 0.0 };
+    texCoord[1] = (Vec2){ 0.0, texCoordV };
+    texCoord[2] = (Vec2){ texCoordH, texCoordV };
+    texCoord[3] = (Vec2){ texCoordH, 0.0 };
+    buildFace(vertices, color, texCoord);
+
+    // Back
+    vertices[0] = (Vec3){ 0.0f, 0.0f, depth };
+    vertices[1] = (Vec3){ width, 0.0f, depth };
+    vertices[2] = (Vec3){ width, height, depth };
+    vertices[3] = (Vec3){ 0.0f, height, depth };
+
+    texCoord[0] = (Vec2){ 0.0, 0.0 };
+    texCoord[1] = (Vec2){ texCoordH, 0.0 };
+    texCoord[2] = (Vec2){ texCoordH, texCoordV };
+    texCoord[3] = (Vec2){ 0.0, texCoordV };
+    buildFace(vertices, color, texCoord);
+
+    // Left
+    vertices[0] = (Vec3){ width, 0.0f, depth };
+    vertices[1] = (Vec3){ width, 0.0f, 0.0f };
+    vertices[2] = (Vec3){ width, height, 0.0f };
+    vertices[3] = (Vec3){ width, height, depth };
+
+    texCoord[0] = (Vec2){ 0.0, 0.0 };
+    texCoord[1] = (Vec2){ texCoordH, 0.0 };
+    texCoord[2] = (Vec2){ texCoordH, texCoordV };
+    texCoord[3] = (Vec2){ 0.0, texCoordV };
+    buildFace(vertices, color, texCoord);
+
+    // Right
+    vertices[0] = (Vec3){ 0.0f, 0.0f, 0.0f };
+    vertices[1] = (Vec3){ 0.0f, 0.0f, depth };
+    vertices[2] = (Vec3){ 0.0f, height, depth };
+    vertices[3] = (Vec3){ 0.0f, height, 0.0f };
+
+    texCoord[2] = (Vec2){ 0.0, 0.0 };
+    texCoord[3] = (Vec2){ texCoordH, 0.0 };
+    texCoord[0] = (Vec2){ texCoordH, texCoordV };
+    texCoord[1] = (Vec2){ 0.0, texCoordV };
+    buildFace(vertices, color, texCoord);
+  }glPopMatrix();
 };
 
 void buildBackWall(Object wall, Color color) {
@@ -180,7 +215,7 @@ void buildKitchen(Object kitchen) {
   } glPopMatrix();
 }
 
-void buildDoor(Object kitchen, float doorAngle) {
+void buildDoor(Object kitchen, float doorAngle, Texture texture) {
 
   Color color;
   Object wall;
@@ -192,11 +227,18 @@ void buildDoor(Object kitchen, float doorAngle) {
 
     // door
     glPushMatrix(); {
+      glEnable(GL_TEXTURE_2D);
+      glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+      glBindTexture(GL_TEXTURE_2D, texture.id);
+
       color = (Color){ 240.0f, 240.0f, 240.0f };
       wall = (Object){ doorDepth, 3 * kitchen.height / 4, kitchen.depth / 6 - doorDepth };
       glTranslatef(kitchen.width + doorDepth, 0.0f, kitchen.depth - doorDepth);
       glRotatef(180.0f + doorAngle, 0.0f, 1.0f, 0.0f);
       buildBlock(wall, color);
+
+      glFlush();
+      glDisable(GL_TEXTURE_2D);
     } glPopMatrix();
 
     // door fix
@@ -253,7 +295,7 @@ void buildWindow(Object kitchen, float windowAngle) {
 }
 
 void buildObject(Object3d object, int faces) {
-  glBegin(GL_LINES); // TODO: CHANGE BACK TO POLYGON
+  glBegin(GL_QUADS); // TODO: CHANGE BACK TO POLYGON
   for (int i = 0;i < object.VERTEX_COUNT;i++) {
     glNormal3f(object.NORMALS[i].x, object.NORMALS[i].y, object.NORMALS[i].z);
     glTexCoord2f(object.TEX_COORDS[i].x, object.TEX_COORDS[i].y);
@@ -262,18 +304,25 @@ void buildObject(Object3d object, int faces) {
   glEnd();
 }
 
-void buildFridge(Object3d fridge, int faces) {
+void buildFridge(Object3d fridge, int faces, Texture texture) {
   glPushMatrix(); {
+
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
+
     glTranslatef(1.0f, 0.0f, 14.0f);
     glScalef(0.018f, 0.018f, 0.018f);
     glRotatef(130.0f, 0.0f, 1.0f, 0.0f);
     glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
-    glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);
     buildObject(fridge, faces);
+
+    glFlush();
+    glDisable(GL_TEXTURE_2D);
   } glPopMatrix();
 }
 
-void buildMicrowave(Object3d microwave, int faces) {
+void buildMicrowave(Object3d microwave, int faces, Texture texture) {
   glPushMatrix(); {
 
     glTranslatef(0.0f, 0.0f, 2.0f);
@@ -287,39 +336,65 @@ void buildMicrowave(Object3d microwave, int faces) {
     } glPopMatrix();
 
     glPushMatrix(); {
+
+      glEnable(GL_TEXTURE_2D);
+      glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+      glBindTexture(GL_TEXTURE_2D, texture.id);
+
       glTranslatef(0.7f, 2.0f, 8.0f);
       glScalef(0.02f, 0.02f, 0.02f);
       glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
       glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
-      glColor3f(100.0f / 255, 50.0f / 255, 50.0f / 255);
+
       buildObject(microwave, faces);
+
+      glFlush();
+      glDisable(GL_TEXTURE_2D);
     } glPopMatrix();
   } glPopMatrix();
 }
 
-void buildStove(Object3d stove, int faces) {
+void buildStove(Object3d stove, int faces, Texture texture) {
   glPushMatrix(); {
+
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
+
     glTranslatef(1.05f, 0.0f, 7.0f);
-    glScalef(0.06f, 0.04f, 0.04f);
+    glScalef(0.02f, 0.02f, 0.02f);
     glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
     glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
-    glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);
     buildObject(stove, faces);
+
+    glFlush();
+    glDisable(GL_TEXTURE_2D);
   } glPopMatrix();
 }
 
-void buildTap(Object3d tap, int faces) {
+void buildTap(Object3d tap, int faces, Texture texture) {
   glPushMatrix(); {
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
+
     glTranslatef(0.71f, -0.3f, 8.25f);
     glScalef(0.002f, 0.002f, 0.002f);
     glRotatef(-90.0f, 0.0f, 1.0f, 0.0f);
-    glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);
     buildObject(tap, faces);
+
+    glFlush();
+    glDisable(GL_TEXTURE_2D);
   } glPopMatrix();
 }
 
-void buildChair(Object3d chair, int faces) {
+void buildChair(Object3d chair, int faces, Texture texture) {
   glPushMatrix(); {
+
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
+
     glPushMatrix(); {
       glTranslatef(2.0f, 1.0f, 1.0f);
       glScalef(0.4f, 0.4f, 0.4f);
@@ -350,6 +425,9 @@ void buildChair(Object3d chair, int faces) {
       glColor3f(0.0f / 255, 50.0f / 255, 50.0f / 255);
       buildObject(chair, faces);
     } glPopMatrix();
+
+    glFlush();
+    glDisable(GL_TEXTURE_2D);
   } glPopMatrix();
 }
 
@@ -550,12 +628,15 @@ void buildCabinet(Object kitchen) {
   } glPopMatrix();
 }
 
-void buildTable() {
+void buildTable(Texture texture) {
   glPushMatrix(); {
     Object section;
     Object topSection;
     Color color = (Color){ 163.0f, 128.0f, 97.0f };
 
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
     // board
     glPushMatrix(); {
       section = (Object){ 5.0f, 0.1f, 2.0f };
@@ -588,9 +669,9 @@ void buildTable() {
         glTranslatef(4.9f, 0.0f, 0.0f);
         buildBlock(section, color);
       } glPopMatrix();
-
-
     }
 
+    glFlush();
+    glDisable(GL_TEXTURE_2D);
   } glPopMatrix();
 }

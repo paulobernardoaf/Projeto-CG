@@ -1,9 +1,13 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <GL/gl.h>
 #include <GL/freeglut.h>
 
 #include "loader.h"
+
+#define STB_IMAGE_IMPLEMENTATION
+#include "../stb_image.h"
 
 
 Object3d load_obj(char* path, int faces) {
@@ -69,4 +73,48 @@ Object3d load_obj(char* path, int faces) {
   fclose(fp);
 
   return (Object3d) { VERTEX_COUNT, VERTICES, NORMALS, TEX_COORDS };
+}
+
+void load_texture(char* filePath, Texture* texture) {
+
+  texture->data = stbi_load(filePath, &texture->width, &texture->height, &texture->nrChannels, 0);
+
+  if (!texture->data) {
+    printf("Failed to load texture: %s \n", filePath);
+    exit(1);
+  }
+
+}
+
+void setupTexture(Texture* texture) {
+  // glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
+
+  glGenTextures(1, &texture->id);
+  glBindTexture(GL_TEXTURE_2D, texture->id);
+
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER,
+    GL_NEAREST);
+  glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER,
+    GL_NEAREST);
+
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, texture->width,
+    texture->height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+    texture->data);
+
+}
+
+void enableMaterial(Material mtl) {
+  GLfloat ambient[] = { mtl.ambient.red, mtl.ambient.green, mtl.ambient.blue, 1.0 };
+  glMaterialfv(GL_FRONT, GL_AMBIENT, ambient);
+  GLfloat diffuse[] = { mtl.diffuse.red, mtl.diffuse.green, mtl.diffuse.blue };
+  glMaterialfv(GL_FRONT, GL_DIFFUSE, diffuse);
+  GLfloat specular[] = { mtl.specular.red, mtl.specular.green, mtl.specular.blue };
+  glMaterialfv(GL_FRONT, GL_SPECULAR, specular);
+  glMaterialf(GL_FRONT, GL_SHININESS, mtl.shininess);
+}
+
+void enableDye(Material mtl) {
+  glColor3f(mtl.diffuse.red, mtl.diffuse.green, mtl.diffuse.blue);
 }

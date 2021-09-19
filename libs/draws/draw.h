@@ -11,34 +11,30 @@ typedef struct Object {
   float width, height, depth;
 } Object;
 
-extern void draw_axis(int x, int y, int z);
-
-extern void draw_grid(int n, int m);
-
 extern void buildKitchen(Object kitchen);
 
 extern void buildBlock(Object block, Color color);
 
-extern void buildFace(Vec3 vertices[], Color color);
+extern void buildFace(Vec3 vertices[], Color color, Vec2 texCoords[]);
 
-extern void buildDoor(Object kitchen, float doorAngle);
+extern void buildDoor(Object kitchen, float doorAngle, Texture texture);
 
 extern void buildWindow(Object kitchen, float windowAngle);
 
 extern void buildObject(Object3d object, int faces);
 
-extern void buildFridge(Object3d fridge, int faces);
+extern void buildFridge(Object3d fridge, int faces, Texture texture);
 
-extern void buildMicrowave(Object3d microwave, int faces);
+extern void buildMicrowave(Object3d microwave, int faces, Texture texture);
 
-extern void buildStove(Object3d stove, int faces);
+extern void buildStove(Object3d stove, int faces, Texture texture);
 
-extern void buildTap(Object3d tap, int faces);
+extern void buildTap(Object3d tap, int faces, Texture texture);
 
-extern void buildChair(Object3d chair, int faces);
+extern void buildChair(Object3d chair, int faces, Texture texture);
 
 extern void buildCabinet(Object kitchen);
 
-extern void buildTable();
+extern void buildTable(Texture texture);
 
 #endif

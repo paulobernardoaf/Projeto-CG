@@ -38,6 +38,15 @@ Object3d stove;
 Object3d tap;
 Object3d chair;
 
+// Textures
+Texture microwaveTexture;
+Texture fridgeTexture;
+Texture stoveTexture;
+Texture chairTexture;
+Texture tableTexture;
+Texture tapTexture;
+Texture doorTexture;
+
 void init_gl();
 
 void display();
@@ -78,7 +87,6 @@ void update(int value) {
 }
 
 int initializeObjects() {
-
   fridge = load_obj("./objs/fridge/Fridge.obj", 4);
   if (!fridge.VERTEX_COUNT) {
     printf("Erro opening fridge .obj file!");
@@ -112,6 +120,30 @@ int initializeObjects() {
   return 1;
 }
 
+void initializeTextures() {
+  load_texture("./objs/microwave/microwave_texture.jpg", &microwaveTexture);
+  setupTexture(&microwaveTexture);
+  
+  load_texture("./objs/fridge/fridge_texture.jpg", &fridgeTexture);
+  setupTexture(&fridgeTexture);
+
+  load_texture("./objs/stove/stove_texture.jpg", &stoveTexture);
+  setupTexture(&stoveTexture);
+  
+  load_texture("./objs/chair/chair_texture.jpg", &chairTexture);
+  setupTexture(&chairTexture);
+  
+  load_texture("./objs/chair/chair_texture.jpg", &tableTexture);
+  setupTexture(&tableTexture);
+  
+  load_texture("./objs/fridge/fridge_texture.jpg", &tapTexture);
+  setupTexture(&tapTexture);
+  
+  load_texture("./objs/door_texture.png", &doorTexture);
+  setupTexture(&doorTexture);
+
+}
+
 int main(int argc, char** argv) {
   glutInit(&argc, argv);
 
@@ -128,6 +160,8 @@ int main(int argc, char** argv) {
   glutTimerFunc(15, update, 0);
 
   init_gl();
+
+  initializeTextures();
 
   if (!initializeObjects()) {
     printf("Failing");
@@ -158,17 +192,17 @@ void display() {
   Object kitchen = (Object){ 9.0f, 5.0f, 15.0f };
   buildKitchen(kitchen);
 
-  buildFridge(fridge, 4);
-  buildMicrowave(microwave, 4);
-  buildStove(stove, 4);
-  buildTap(tap, 4);
-  buildChair(chair, 4);
+  buildFridge(fridge, 4, fridgeTexture);
+  buildMicrowave(microwave, 4, microwaveTexture);
+  buildStove(stove, 4, stoveTexture);
+  buildTap(tap, 4, tapTexture);
+  buildChair(chair, 4, chairTexture);
 
   buildCabinet(kitchen);
-  buildTable();
+  buildTable(tableTexture);
 
   handleDoorAnimation();
-  buildDoor(kitchen, DOOR_ANGLE);
+  buildDoor(kitchen, DOOR_ANGLE, doorTexture);
 
   handleWindowAnimation();
   buildWindow(kitchen, WINDOW_ANGLE);
