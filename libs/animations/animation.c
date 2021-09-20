@@ -49,3 +49,10 @@ void handleWindowAnimation() {
     WINDOW_STEP = 3; // closed
   }
 }
+
+void handleFanAnimation() {
+  FAN_ROTATION += 1.0;
+  if (FAN_ROTATION > 360) FAN_ROTATION = 0;
+  else if (FAN_ROTATION < 0) FAN_ROTATION = 360;
+}
+

@@ -31,6 +31,8 @@ float DOOR_ANGLE = 0.0f;
 int WINDOW_STEP = 1;
 float WINDOW_ANGLE = -45.0f;
 
+float FAN_ROTATION = 0.0f;
+
 // Objects
 Object3d fridge;
 Object3d microwave;
@@ -38,6 +40,7 @@ Object3d stove;
 Object3d tap;
 Object3d chair;
 Object3d lamp;
+Object3d fan;
 
 // Textures
 Texture microwaveTexture;
@@ -48,6 +51,7 @@ Texture tableTexture;
 Texture tapTexture;
 Texture doorTexture;
 Texture lampTexture;
+Texture fanTexture;
 
 void init_gl();
 
@@ -125,6 +129,12 @@ int initializeObjects() {
     return 0;
   }
 
+  fan = load_obj("./objs/fan/fan.obj", 4);
+  if (!fan.VERTEX_COUNT) {
+    printf("Erro opening stove .obj file!");
+    return 0;
+  }
+
   return 1;
 }
 
@@ -152,6 +162,9 @@ void initializeTextures() {
 
   load_texture("./objs/lamp/lamp_texture.jpg", &lampTexture);
   setupTexture(&lampTexture);
+
+  load_texture("./objs/fan/fan_texture.jpg", &fanTexture);
+  setupTexture(&fanTexture);
 
 }
 
@@ -209,6 +222,9 @@ void display() {
   buildTap(tap, 4, tapTexture);
   buildChair(chair, 4, chairTexture);
   buildLamp(lamp, 4, lampTexture);
+
+  handleFanAnimation();
+  buildFan(fan, 4, FAN_ROTATION, fanTexture);
 
   buildCabinet(kitchen);
   buildTable(tableTexture);

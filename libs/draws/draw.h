@@ -39,4 +39,6 @@ extern void buildTable(Texture texture);
 
 extern void buildLamp(Object3d lamp, int faces, Texture texture);
 
+extern void buildFan(Object3d fan, int faces, float rotation, Texture texture);
+
 #endif

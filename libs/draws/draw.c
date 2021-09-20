@@ -692,3 +692,20 @@ void buildLamp(Object3d lamp, int faces, Texture texture) {
     glDisable(GL_TEXTURE_2D);
   } glPopMatrix();
 }
+
+void buildFan(Object3d fan, int faces, float rotation, Texture texture) {
+  glPushMatrix(); {
+    glEnable(GL_TEXTURE_2D);
+    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+    glBindTexture(GL_TEXTURE_2D, texture.id);
+
+    glTranslatef(4.71f, 3.35f, 2.25f);
+    glScalef(0.015f, 0.015f, 0.015f);
+    glRotatef(rotation, 0.0f, 1.0f, 0.0f);
+    glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    buildObject(fan, faces);
+
+    glFlush();
+    glDisable(GL_TEXTURE_2D);
+  } glPopMatrix();
+}
