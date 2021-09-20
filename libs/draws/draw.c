@@ -25,7 +25,6 @@ void buildFace(Vec3 vertices[], Color color, Vec2 texCoord[]) {
 }
 
 void buildBlock(Object block, Color color) {
-
   glPushMatrix(); {
     GLfloat texCoordH = 1.0;
     GLfloat texCoordV = 1.0;
@@ -37,6 +36,7 @@ void buildBlock(Object block, Color color) {
     float depth = block.depth;
 
     // Bottom
+    glNormal3f(0, -1, 0);
     vertices[0] = (Vec3){ 0.0f, 0.0f, 0.0f };
     vertices[1] = (Vec3){ width, 0.0f, 0.0f };
     vertices[2] = (Vec3){ width, 0.0f, depth };
@@ -49,6 +49,7 @@ void buildBlock(Object block, Color color) {
     buildFace(vertices, color, texCoord);
 
     // Top
+    glNormal3f(0, 1, 0);
     vertices[0] = (Vec3){ 0.0f, height, 0.0f };
     vertices[1] = (Vec3){ 0.0f, height, depth };
     vertices[2] = (Vec3){ width, height, depth };
@@ -61,6 +62,7 @@ void buildBlock(Object block, Color color) {
     buildFace(vertices, color, texCoord);
 
     // Front
+    glNormal3f(0, 0, -1);
     vertices[0] = (Vec3){ 0.0f, 0.0f, 0.0f };
     vertices[1] = (Vec3){ 0.0f, height, 0.0f };
     vertices[2] = (Vec3){ width, height, 0.0f };
@@ -73,6 +75,7 @@ void buildBlock(Object block, Color color) {
     buildFace(vertices, color, texCoord);
 
     // Back
+    glNormal3f(0, 0, 1);
     vertices[0] = (Vec3){ 0.0f, 0.0f, depth };
     vertices[1] = (Vec3){ width, 0.0f, depth };
     vertices[2] = (Vec3){ width, height, depth };
@@ -82,9 +85,12 @@ void buildBlock(Object block, Color color) {
     texCoord[1] = (Vec2){ texCoordH, 0.0 };
     texCoord[2] = (Vec2){ texCoordH, texCoordV };
     texCoord[3] = (Vec2){ 0.0, texCoordV };
+    
     buildFace(vertices, color, texCoord);
 
+
     // Left
+    glNormal3f(1, 0, 0);
     vertices[0] = (Vec3){ width, 0.0f, depth };
     vertices[1] = (Vec3){ width, 0.0f, 0.0f };
     vertices[2] = (Vec3){ width, height, 0.0f };
@@ -97,6 +103,7 @@ void buildBlock(Object block, Color color) {
     buildFace(vertices, color, texCoord);
 
     // Right
+    glNormal3f(-1, 0, 0);    
     vertices[0] = (Vec3){ 0.0f, 0.0f, 0.0f };
     vertices[1] = (Vec3){ 0.0f, 0.0f, depth };
     vertices[2] = (Vec3){ 0.0f, height, depth };
@@ -682,7 +689,7 @@ void buildLamp(Object3d lamp, int faces, Texture texture) {
     glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
     glBindTexture(GL_TEXTURE_2D, texture.id);
 
-    glTranslatef(4.71f, 1.6f, 0.25f);
+    glTranslatef(4.71f, 1.6f, 0.4f);
     glScalef(0.015f, 0.015f, 0.015f);
     glRotatef(140.0f, 0.0f, 1.0f, 0.0f);
     glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);

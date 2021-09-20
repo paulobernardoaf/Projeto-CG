@@ -16,6 +16,8 @@
 #define WINDOW_HEIGHT 9*75
 // Global variables
 
+int enable = 1;
+
 const float DEG2RAD = M_PI / 180.0f;
 float speed = 0.1f;
 Vec2 WINDOW_SIZE = { WINDOW_WIDTH, WINDOW_HEIGHT };
@@ -32,6 +34,15 @@ int WINDOW_STEP = 1;
 float WINDOW_ANGLE = -45.0f;
 
 float FAN_ROTATION = 0.0f;
+
+// Light Props
+
+GLfloat light0_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
+GLfloat light0_diffuse[] = { 0.0, 0.0, 0.0, 1.0 };
+GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat light0_position[] = { 4.5f, 4.5f, 9.0f, 1.0f };
+
+float mat_shininess[] = { 50.0f };
 
 // Objects
 Object3d fridge;
@@ -54,6 +65,10 @@ Texture lampTexture;
 Texture fanTexture;
 
 void init_gl();
+
+void setup_lighting();
+
+void initLights();
 
 void display();
 
@@ -123,6 +138,7 @@ int initializeObjects() {
     return 0;
   }
 
+  printf("Loading lamp\n");
   lamp = load_obj("./objs/lamp/lamp.obj", 4);
   if (!lamp.VERTEX_COUNT) {
     printf("Erro opening stove .obj file!");
@@ -141,22 +157,22 @@ int initializeObjects() {
 void initializeTextures() {
   load_texture("./objs/microwave/microwave_texture.jpg", &microwaveTexture);
   setupTexture(&microwaveTexture);
-  
+
   load_texture("./objs/fridge/fridge_texture.jpg", &fridgeTexture);
   setupTexture(&fridgeTexture);
 
   load_texture("./objs/stove/stove_texture.jpg", &stoveTexture);
   setupTexture(&stoveTexture);
-  
+
   load_texture("./objs/chair/chair_texture.jpg", &chairTexture);
   setupTexture(&chairTexture);
-  
+
   load_texture("./objs/chair/chair_texture.jpg", &tableTexture);
   setupTexture(&tableTexture);
-  
+
   load_texture("./objs/fridge/fridge_texture.jpg", &tapTexture);
   setupTexture(&tapTexture);
-  
+
   load_texture("./objs/door_texture.png", &doorTexture);
   setupTexture(&doorTexture);
 
@@ -185,14 +201,19 @@ int main(int argc, char** argv) {
 
   init_gl();
 
+  initializeCamera(&CAM);
+
+  setup_lighting();
+
+  glEnable(GL_COLOR_MATERIAL);
+  glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+
   initializeTextures();
 
   if (!initializeObjects()) {
     printf("Failing");
     return -1;
   };
-
-  initializeCamera(&CAM);
 
   glutMainLoop();
 
@@ -206,12 +227,50 @@ void init_gl() {
   glCullFace(GL_BACK);
 }
 
+void setup_lighting() {
+  // glEnable(GL_LIGHTING);
+  // glEnable(GL_LIGHT0);
+  // glEnable(GL_DEPTH_TEST);
+
+  glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
+
+  // Anti aliasing smoothing props ........................................................
+  glEnable(GL_LINE_SMOOTH);
+  glEnable(GL_POINT_SMOOTH);
+  glEnable(GL_BLEND);
+
+  // Lighting and Shade setup .............................................................
+  glEnable(GL_DEPTH_TEST);
+  glDepthFunc(GL_LEQUAL);
+  glShadeModel(GL_SMOOTH);
+}
+
+void initLights() {
+  glPushMatrix(); {
+
+    glEnable(GL_LIGHTING);
+
+    glPushMatrix(); {
+      glEnable(GL_LIGHT0);
+      glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
+      glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+      glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
+      glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
+
+    } glPopMatrix();
+  } glPopMatrix();
+
+
+}
+
 // Callbacks
 void display() {
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glClearColor(0.31, 0.61, 0.85, 1.0);
 
   setupCamera(&CAM);
+
+  initLights();
 
   Object kitchen = (Object){ 9.0f, 5.0f, 15.0f };
   buildKitchen(kitchen);
@@ -274,8 +333,12 @@ void keyboard(unsigned char key, int x, int y) {
   else if (key == '2') {
     handleWindow();
   }
-  else if (key == 27)
+  else if (key == 27) {
     glutLeaveMainLoop();
+  }
+  else if (key == '3') {
+    enable = !enable;
+  }
 
   KEYBOARD[tolower(key)] = 1;
 }

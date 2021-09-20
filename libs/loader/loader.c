@@ -72,6 +72,8 @@ Object3d load_obj(char* path, int faces) {
 
   fclose(fp);
 
+  printf("Vertices %d\n", VERTEX_COUNT);
+
   return (Object3d) { VERTEX_COUNT, VERTICES, NORMALS, TEX_COORDS };
 }
 
@@ -87,8 +89,6 @@ void load_texture(char* filePath, Texture* texture) {
 }
 
 void setupTexture(Texture* texture) {
-  // glPixelStoref(GL_UNPACK_ALIGNMENT, 1);
-
   glGenTextures(1, &texture->id);
   glBindTexture(GL_TEXTURE_2D, texture->id);
 
