@@ -72,8 +72,6 @@ Object3d load_obj(char* path, int faces) {
 
   fclose(fp);
 
-  printf("Vertices %d\n", VERTEX_COUNT);
-
   return (Object3d) { VERTEX_COUNT, VERTICES, NORMALS, TEX_COORDS };
 }
 

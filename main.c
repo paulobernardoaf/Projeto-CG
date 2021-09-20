@@ -38,7 +38,7 @@ float FAN_ROTATION = 0.0f;
 // Light Props
 
 GLfloat light0_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
-GLfloat light0_diffuse[] = { 0.0, 0.0, 0.0, 1.0 };
+GLfloat light0_diffuse[] = { 0.8, 0.8, 0.8, 1.0 };
 GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_position[] = { 4.5f, 4.5f, 9.0f, 1.0f };
 
@@ -138,7 +138,6 @@ int initializeObjects() {
     return 0;
   }
 
-  printf("Loading lamp\n");
   lamp = load_obj("./objs/lamp/lamp.obj", 4);
   if (!lamp.VERTEX_COUNT) {
     printf("Erro opening stove .obj file!");
