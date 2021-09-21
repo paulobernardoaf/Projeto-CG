@@ -1,6 +1,7 @@
 # Projeto-CG - OpenGL Kitchen
 
-[Vídeo AB1](https://youtu.be/iyVwzpTRPTk)
+[Vídeo AB1](https://youtu.be/iyVwzpTRPTk) \
+[Vídeo AB2](https://youtu.be/zxhTEXvyNx4)
 
 # Prerequisites
 
@@ -38,6 +39,13 @@ gcc main.c libs/**/*.o -o main.exe -I"Your path to \freeglut\include" -L"Your pa
 ./main.exe
 ```
 
+# Objects
+
+- [Free3D](https://free3d.com/)
+- [TurboSquid](https://www.turbosquid.com/)
+- [cgtrader](https://www.cgtrader.com/)
+
+
 # Controls
 
 ### Movement Controls
@@ -49,3 +57,5 @@ gcc main.c libs/**/*.o -o main.exe -I"Your path to \freeglut\include" -L"Your pa
 
 - 1 > Open and Close the door
 - 2 > Open and Close the window
+- 3 > Turn on the lamp
+- 4 > Turn off the lamp
