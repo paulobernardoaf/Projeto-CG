@@ -35,12 +35,19 @@ float WINDOW_ANGLE = -45.0f;
 
 float FAN_ROTATION = 0.0f;
 
+int LIGHT_STATE = 1;
+
 // Light Props
 
 GLfloat light0_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
-GLfloat light0_diffuse[] = { 1.0, 1.0, 1.0, 1.0 };
-GLfloat light0_specular[] = { 1.0, 1.0, 0.0, 1.0 };
+GLfloat light0_diffuse[] = { 1.0, 1.0, 0.9, 1.0 };
+GLfloat light0_specular[] = { 1.0, 1.0, 1.0, 1.0 };
 GLfloat light0_position[] = { 4.71f, 1.6f, 0.4f, 1.0f };
+
+GLfloat light1_ambient[] = { 0.1, 0.1, 0.1, 1.0 };
+GLfloat light1_diffuse[] = { 0.7, 0.7, 0.6, 1.0 };
+GLfloat light1_specular[] = { 1.0, 1.0, 1.0, 1.0 };
+GLfloat light1_position[] = { 4.5f, 3.6f, 12.4f, 1.0f };
 
 float mat_shininess[] = { 50.0f };
 
@@ -63,6 +70,7 @@ Texture tapTexture;
 Texture doorTexture;
 Texture lampTexture;
 Texture fanTexture;
+Texture paintTexture;
 
 void init_gl();
 
@@ -181,6 +189,9 @@ void initializeTextures() {
   load_texture("./objs/fan/fan_texture.jpg", &fanTexture);
   setupTexture(&fanTexture);
 
+  load_texture("./objs/fine.jpg", &paintTexture);
+  setupTexture(&paintTexture);
+
 }
 
 int main(int argc, char** argv) {
@@ -227,22 +238,20 @@ void init_gl() {
 }
 
 void setup_lighting() {
-  // glEnable(GL_LIGHTING);
-  // glEnable(GL_LIGHT0);
-  // glEnable(GL_DEPTH_TEST);
-  glMaterialfv(GL_FRONT, GL_SHININESS, mat_shininess);
-
   glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_TRUE);
 
-  // Anti aliasing smoothing props ........................................................
   glEnable(GL_LINE_SMOOTH);
   glEnable(GL_POINT_SMOOTH);
   glEnable(GL_BLEND);
 
-  // Lighting and Shade setup .............................................................
   glEnable(GL_DEPTH_TEST);
   glDepthFunc(GL_LEQUAL);
   glShadeModel(GL_SMOOTH);
+
+
+  glEnable(GL_LIGHT0);
+  glEnable(GL_LIGHT1);
+
 }
 
 void initLights() {
@@ -252,29 +261,28 @@ void initLights() {
 
     glPushMatrix(); {
 
-      // glTranslatef(-CAM.position.x, -CAM.position.y, -CAM.position.z);
+      glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
+      glLightfv(GL_LIGHT0, GL_DIFFUSE, light0_diffuse);
+      glLightfv(GL_LIGHT0, GL_SPECULAR, light0_specular);
+      glLightfv(GL_LIGHT0, GL_POSITION, light0_position);
 
-      // glLightfv(GL_LIGHT0, GL_AMBIENT, light0_ambient);
-      float spot_direction [] = {-0.7f , -0.3f , 0.0f };
-      float spot_cutoff [] = {15.0f };
-      float spot_specular[] = {1.0f, 1.0f, 0.0f};//amarelo
-      float spot_position[] = {4 , 2 , 1, 1.0 };
-      float spot_difuse[] = {1.0, 1.0, 0.0};
-      glLightfv(GL_LIGHT0, GL_SPECULAR, spot_specular);
-      glLightfv(GL_LIGHT0, GL_DIFFUSE, spot_difuse);
-      glLightfv(GL_LIGHT0, GL_POSITION, spot_position);
-
-      // glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.5);
-      // glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.5);
-      // glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.2);
-
-      GLfloat direction[] = {-0.7f , -0.3f , 0.0f };
-      glLightfv(GL_LIGHT0, GL_SPOT_DIRECTION, spot_direction);
-      glLightfv(GL_LIGHT0, GL_SPOT_CUTOFF, spot_cutoff);
-      // glLightf(GL_LIGHT0, GL_SPOT_EXPONENT, 2.0);
+      glLightf(GL_LIGHT0, GL_CONSTANT_ATTENUATION, 1.0);
+      glLightf(GL_LIGHT0, GL_LINEAR_ATTENUATION, 0.0);
+      glLightf(GL_LIGHT0, GL_QUADRATIC_ATTENUATION, 0.0);
 
     } glPopMatrix();
 
+    glPushMatrix(); {
+
+      glLightfv(GL_LIGHT1, GL_DIFFUSE, light1_diffuse);
+      glLightfv(GL_LIGHT1, GL_SPECULAR, light1_specular);
+      glLightfv(GL_LIGHT1, GL_POSITION, light1_position);
+
+      glLightf(GL_LIGHT1, GL_CONSTANT_ATTENUATION, 0.1);
+      glLightf(GL_LIGHT1, GL_LINEAR_ATTENUATION, 0.2);
+      glLightf(GL_LIGHT1, GL_QUADRATIC_ATTENUATION, 0.2);
+
+    } glPopMatrix();
   } glPopMatrix();
 
 
@@ -286,6 +294,8 @@ void display() {
   glClearColor(0.31, 0.61, 0.85, 1.0);
 
   setupCamera(&CAM);
+
+  initLights();
 
   Object kitchen = (Object){ 9.0f, 5.0f, 15.0f };
   buildKitchen(kitchen);
@@ -309,7 +319,7 @@ void display() {
   handleWindowAnimation();
   buildWindow(kitchen, WINDOW_ANGLE);
 
-  initLights();
+  buildPaint(paintTexture);
 
   glutSwapBuffers();
 }
@@ -354,7 +364,10 @@ void keyboard(unsigned char key, int x, int y) {
     glutLeaveMainLoop();
   }
   else if (key == '3') {
-    enable = !enable;
+    glEnable(GL_LIGHT0);
+  }
+  else if (key == '4') {
+    glDisable(GL_LIGHT0);
   }
 
   KEYBOARD[tolower(key)] = 1;

@@ -702,17 +702,63 @@ void buildLamp(Object3d lamp, int faces, Texture texture) {
 
 void buildFan(Object3d fan, int faces, float rotation, Texture texture) {
   glPushMatrix(); {
-    glEnable(GL_TEXTURE_2D);
-    glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-    glBindTexture(GL_TEXTURE_2D, texture.id);
 
     glTranslatef(4.71f, 3.35f, 2.25f);
     glScalef(0.015f, 0.015f, 0.015f);
     glRotatef(rotation, 0.0f, 1.0f, 0.0f);
     glRotatef(-90.0f, 1.0f, 0.0f, 0.0f);
+    glColor3f(1, 1, 1);
     buildObject(fan, faces);
 
-    glFlush();
-    glDisable(GL_TEXTURE_2D);
+  } glPopMatrix();
+}
+
+void buildPaint(Texture texture) {
+  Color color;
+  Object board;
+
+  glPushMatrix(); {
+
+    // door
+    glPushMatrix(); {
+      glEnable(GL_TEXTURE_2D);
+      glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+      glBindTexture(GL_TEXTURE_2D, texture.id);
+
+      color = (Color){ 240.0f, 240.0f, 240.0f };
+      board = (Object){ 2.0f, 1.0f, 0.1f };
+      glTranslatef(8.95f, 3.0f, 2.0f);
+      glRotatef(90.0f, 0.0f, 1.0f, 0.0f);
+      glRotatef(180.0f, 0.0f, 0.0f, 1.0f);
+      buildBlock(board, color);
+
+      glFlush();
+      glDisable(GL_TEXTURE_2D);
+    } glPopMatrix();
+
+    // frame
+    color = (Color){ 54.0f, 150.0f, 118.0f };
+    board = (Object){ 2.0f, 1.2f, 0.1f };
+    glPushMatrix(); {
+      glTranslatef(8.9f, 1.9f, 1.9f);
+      buildBlock(board, color);
+    } glPopMatrix();
+
+    glPushMatrix(); {
+      glTranslatef(8.9f, 1.9f, 4.0f);
+      buildBlock(board, color);
+    } glPopMatrix();
+
+
+    board = (Object){ 2.0f, 0.1f, 2.2f };
+    glPushMatrix(); {
+      glTranslatef(8.9f, 1.9f, 1.9f);
+      buildBlock(board, color);
+    } glPopMatrix();
+
+    glPushMatrix(); {
+      glTranslatef(8.9f, 3.0f, 1.9f);
+      buildBlock(board, color);
+    } glPopMatrix();
   } glPopMatrix();
 }
